@@ -358,6 +358,31 @@ var stats = execMain(function(kpretty, round, kpround) {
 		}
 	})();
 
+	function setComment(idx, comment) {
+		if (idx < 0 || idx >= times.length) {
+			return false;
+		}
+		comment = comment == null ? "" : "" + comment;
+		if (kernel.getProp('statsrc', 't').startsWith('mcomment')) {
+			rollBackExec(idx, function() {
+				timesAt(idx)[2] = comment;
+				timesExtra[idx] = null;
+			});
+			sessionManager.save(idx);
+			table_ctrl.updateFrom(idx);
+		} else {
+			timesAt(idx)[2] = comment;
+			timesExtra[idx] = null;
+			sessionManager.save(idx);
+			var idxRow = table_ctrl.getRowIndexOf(idx);
+			if (idxRow) {
+				getTimeRow(idx, curDim, idxRow);
+			}
+		}
+		updateUtil(['comment', idx]);
+		return true;
+	}
+
 	var floatCfm = (function() {
 		var cfmDiv = $('<div style="text-align:center; font-family: initial;">');
 		var cfmTime = $('<span style="font-size:2.5em;"/>');
@@ -372,24 +397,7 @@ var stats = execMain(function(kpretty, round, kpround) {
 			if (cfmIdx < 0 || cfmIdx >= times.length) {
 				return;
 			}
-			if (kernel.getProp('statsrc', 't').startsWith('mcomment')) {
-				rollBackExec(cfmIdx, function() {
-					timesAt(cfmIdx)[2] = cfmTxtR.val();
-					timesExtra[cfmIdx] = null;
-				});
-				sessionManager.save(cfmIdx);
-				table_ctrl.updateFrom(cfmIdx);
-				updateUtil(['comment', cfmIdx]);
-			} else {
-				timesAt(cfmIdx)[2] = cfmTxtR.val();
-				timesExtra[cfmIdx] = null;
-				sessionManager.save(cfmIdx);
-				var cfmIdxRow = table_ctrl.getRowIndexOf(cfmIdx);
-				if (cfmIdxRow) {
-					getTimeRow(cfmIdx, curDim, cfmIdxRow);
-				}
-				updateSumTable();
-			}
+			setComment(cfmIdx, cfmTxtR.val());
 		}
 
 		function procClk(e) {
@@ -2025,6 +2033,7 @@ var stats = execMain(function(kpretty, round, kpround) {
 		trim: trim,
 		timesAt: timesAt,
 		timeAt: timeAt,
+		setComment: setComment,
 		infoClick: infoClick,
 		regUtil: regUtil,
 		regExtraInfo: regExtraInfo,

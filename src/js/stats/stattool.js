@@ -61,14 +61,144 @@ var stattool = execMain(function(kpretty, round, kpround) {
 		updateInfo();
 	}
 
+	var commentStat = (function() {
+		var div = $('<div />').css('text-align', 'center').css('font-size', '0.7em');
+		var editDiv = $('<div />');
+		var latestLabel = $('<span>');
+		var commentInput = $('<input type="text">').css('width', '8em');
+		var saveButton = $('<input type="button">').val(STATS_COMMENT);
+		var table = $('<table class="table">');
+		var isEnable = false;
+
+		function normalizeComment(comment) {
+			return $.trim((comment || '').replace(/\s+/g, ' ')).toLowerCase();
+		}
+
+		function groupTimeAt(idxs, idx) {
+			return stats.timeAt(idxs[idx]);
+		}
+
+		function cmpLabel(a, b) {
+			return a < b ? -1 : a > b ? 1 : 0;
+		}
+
+		function saveLatestComment() {
+			var timesLen = stats.getTimesStatsTable().timesLen;
+			if (timesLen == 0) {
+				return;
+			}
+			stats.setComment(timesLen - 1, commentInput.val());
+		}
+
+		function procInputKey(e) {
+			if (e.keyCode == 13) {
+				saveLatestComment();
+				kernel.blur();
+			}
+		}
+
+		function updateEditor(timesLen) {
+			if (timesLen == 0) {
+				latestLabel.text(STATS_COMMENT + ': ');
+				commentInput.val('').prop('disabled', true);
+				saveButton.prop('disabled', true);
+				return;
+			}
+			latestLabel.text('#' + timesLen + ' ' + STATS_COMMENT + ': ');
+			commentInput.prop('disabled', false).val(stats.timesAt(timesLen - 1)[2]);
+			saveButton.prop('disabled', false);
+		}
+
+		function update() {
+			if (!isEnable) {
+				return;
+			}
+
+			var timesLen = stats.getTimesStatsTable().timesLen;
+			updateEditor(timesLen);
+			var groups = {};
+			var list = [];
+
+			for (var i = 0; i < timesLen; i++) {
+				var key = normalizeComment(stats.timesAt(i)[2]);
+				var mapKey = '$' + key;
+				if (!groups[mapKey]) {
+					groups[mapKey] = {
+						key: key,
+						idxs: []
+					};
+					list.push(groups[mapKey]);
+				}
+				groups[mapKey].idxs.push(i);
+			}
+
+			list.sort(function(a, b) {
+				if (a.key == '') {
+					return b.key == '' ? 0 : -1;
+				} else if (b.key == '') {
+					return 1;
+				}
+				return b.idxs.length - a.idxs.length || cmpLabel(a.key, b.key);
+			});
+
+			table.empty().append($('<tr>')
+				.append($('<th>').text(STATS_COMMENT))
+				.append($('<th>').text('N'))
+				.append($('<th>').text(STATS_SOLVE))
+				.append($('<th>').text(hlstr[0]))
+				.append($('<th>').text(STATS_AVG))
+			);
+
+			if (timesLen == 0) {
+				table.append($('<tr>').append($('<td colspan="5">').text('No solves')));
+				return;
+			}
+
+			for (var i = 0; i < list.length; i++) {
+				var group = list[i];
+				var statObj = new TimeStat([], group.idxs.length, groupTimeAt.bind(null, group.idxs));
+				var statRet = statObj.getAllStats();
+				var solved = group.idxs.length - statRet[0];
+				var share = stats.trim(group.idxs.length / timesLen * 100, 1) + '%';
+				table.append($('<tr>')
+					.append($('<td>').text(group.key || '(blank)'))
+					.append($('<td>').text(group.idxs.length + ' (' + share + ')'))
+					.append($('<td>').text(solved + '/' + group.idxs.length))
+					.append($('<td>').text(solved ? kpretty(statObj.bestTime) : 'DNF'))
+					.append($('<td>').text(solved ? kpround(statRet[1]) : 'N/A'))
+				);
+			}
+		}
+
+		function execFunc(fdiv, signal) {
+			if (!(isEnable = (fdiv != undefined))) {
+				return;
+			}
+			if (/^scr/.exec(signal)) {
+				return;
+			}
+			editDiv.empty().append(latestLabel, commentInput.unbind('change keydown').change(saveLatestComment).keydown(procInputKey), saveButton.unbind('click').click(saveLatestComment));
+			fdiv.empty().append(div.empty().append(editDiv, table));
+			update();
+		}
+
+		return {
+			execFunc: execFunc,
+			update: update
+		}
+	})();
+
 	$(function() {
 		if (typeof tools != "undefined") {
 			tools.regTool('stats', TOOLS_STATS, execFunc);
+			tools.regTool('commentstat', 'Comment Statistics', commentStat.execFunc);
 		}
 		stats.regUtil('stattool', updateInfo);
+		stats.regUtil('commentstat', commentStat.update);
 	});
 
 	return {
-		update: updateInfo
+		update: updateInfo,
+		updateComment: commentStat.update
 	}
 }, [kernel.pretty, kernel.round, kernel.pround]);
