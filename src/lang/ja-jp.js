@@ -184,6 +184,7 @@ var scrdata = [
 		['メガミンクス', "mgmp", -70],
 		['ピラミンクス', "pyrso", -10],
 		['スキューブ', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['スクエア１', "sqrs", 0],
 		['4x4目隠し', "444bld", -40],
 		['5x5目隠し', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['face turn metric', "sq1h", 40],
 		['twist metric', "sq1t", 20]
 	]],
+	['FTO (Face-Turning Octahedron)', [
+		['ランダム状態', "ftoso", 0],
+		['ランダムムーブ', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond ランダム状態', "dmdso", 0]
+	]],
 	['===その他===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap style', "ufo", 25]
-	]],
-	['FTO (Face-Turning Octahedron)', [
-		['ランダム状態', "ftoso", 0],
-		['ランダムムーブ', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond ランダム状態', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate ランダムムーブ', "ctico", 60]

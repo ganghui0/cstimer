@@ -17,7 +17,7 @@
 <option value="?lang=it-it">Italiano</option>
 <option value="?lang=ja-jp">日本語</option>
 <option value="?lang=ko-kr">한국어</option>
-<option value="?lang=lv-lv">Angļu</option>
+<option value="?lang=lv-lv">Latviešu</option>
 <option value="?lang=nl-nl">Nederlands</option>
 <option value="?lang=no-no">Norsk</option>
 <option value="?lang=pl-pl">Polski</option>

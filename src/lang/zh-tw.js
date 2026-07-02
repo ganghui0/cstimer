@@ -184,6 +184,7 @@ var scrdata = [
 		['十二面體', "mgmp", -70],
 		['金字塔', "pyrso", -10],
 		['斜轉', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['SQ-1', "sqrs", 0],
 		['4x4x4盲解', "444bld", -40],
 		['5x5x5盲解', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['面轉演算法', "sq1h", 40],
 		['扭轉演算法', "sq1t", 20]
 	]],
+	['面轉正八面體', [
+		['隨機狀態', "ftoso", 0],
+		['隨機步驟', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond 隨機狀態', "dmdso", 0]
+	]],
 	['===其他===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['飛碟方塊', [
 		['Jaap打亂法', "ufo", 25]
-	]],
-	['面轉正八面體', [
-		['隨機狀態', "ftoso", 0],
-		['隨機步驟', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond 隨機狀態', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate 隨機步驟', "ctico", 60]

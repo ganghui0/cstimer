@@ -1,31 +1,31 @@
 var OK_LANG = 'Labi';
 var CANCEL_LANG = 'Atcelt';
-var RESET_LANG = 'Reset';
-var ABOUT_LANG = 'About';
-var ZOOM_LANG = 'Zoom';
-var COPY_LANG = 'Copy';
+var RESET_LANG = 'Atiestatīt';
+var ABOUT_LANG = 'Par';
+var ZOOM_LANG = 'Tālummaiņa';
+var COPY_LANG = 'Kopēt';
 var BUTTON_TIME_LIST = 'LIST<br>TIMES';
-var BUTTON_OPTIONS = 'OPCIJA';
+var BUTTON_OPTIONS = 'OPCIJAS';
 var BUTTON_EXPORT = 'EKSPORTĒT';
 var BUTTON_DONATE = 'ZIEDOT';
 var PROPERTY_SR = 'With session';
 var PROPERTY_USEINS = 'izmantot WCA inspekciju';
-var PROPERTY_USEINS_STR = 'Always (down)|Always (up)|Except BLD (down)|Except BLD (up)|Never';
-var PROPERTY_SHOWINS = 'Show an icon when inspection is enabled';
-var PROPERTY_VOICEINS = 'voice alert of WCA inspection';
-var PROPERTY_VOICEINS_STR = 'none|male voice|female voice';
+var PROPERTY_USEINS_STR = 'Vienmēr (uz leju)|Vienmēr (uz augšu)|Izņemot BLD (uz leju)|Izņemot BLD (us augšu)|Nekad';
+var PROPERTY_SHOWINS = 'Rādīt ikonu kad ir iespējota inspekcija';
+var PROPERTY_VOICEINS = 'balss paziņojums par WCA inspekciju';
+var PROPERTY_VOICEINS_STR = 'nekāds|vīrieša balss|sievietes balss';
 var PROPERTY_VOICEVOL = 'Voice volume';
-var PROPERTY_PHASES = 'multi-phase';
-var PROPERTY_TIMERSIZE = 'timer size';
-var PROPERTY_USEMILLI = 'izmanto millisekundes';
-var PROPERTY_SMALLADP = 'use small font after decimal point';
+var PROPERTY_PHASES = 'multi-fāžu';
+var PROPERTY_TIMERSIZE = 'taimera lielums';
+var PROPERTY_USEMILLI = 'izmantot millisekundes';
+var PROPERTY_SMALLADP = 'izmantot mazu fontu aiz komata';
 var PROPERTY_SCRSIZE = 'scramble size';
 var PROPERTY_SCRMONO = 'monospaced scramble';
 var PROPERTY_SCRLIM = 'Limit the height of scramble area';
 var PROPERTY_SCRALIGN = 'Alignment of scramble area';
-var PROPERTY_SCRALIGN_STR = 'center|left|right';
+var PROPERTY_SCRALIGN_STR = 'vidus|kreisi|labi';
 var PROPERTY_SCRWRAP = 'Scramble Wrap';
-var PROPERTY_SCRWRAP_STR = 'Balanced|Normal';
+var PROPERTY_SCRWRAP_STR = 'Balancēts|Normāls';
 var PROPERTY_SCRNEUT = 'Color neutral';
 var PROPERTY_SCRNEUT_STR = 'None|Single face|Double faces|Six faces';
 var PROPERTY_SCREQPR = 'Probabilities for training-scramble states';
@@ -38,17 +38,17 @@ var PROPERTY_WNDSCR = 'Scramble panel display style';
 var PROPERTY_WNDSTAT = 'Statistics panel display style';
 var PROPERTY_WNDTOOL = 'Tools panel display style';
 var PROPERTY_WND_STR = 'Normāls|Plats';
-var EXPORT_DATAEXPORT = 'Datu Importu/Eksportu';
+var EXPORT_DATAEXPORT = 'Datu Imports/Eksports';
 var EXPORT_TOFILE = 'Eksportēt uz failu';
-var EXPORT_FROMFILE = 'Import from file';
+var EXPORT_FROMFILE = 'Importēt no faila';
 var EXPORT_TOSERV = 'Eksportēt uz serveri';
 var EXPORT_FROMSERV = 'Importēt no servera';
-var EXPORT_FROMOTHER = 'Import session(s) from other timers';
-var EXPORT_USERID = 'Please input your account (only alphabet or number)';
-var EXPORT_INVID = 'Only alphabet or number is allowed!';
-var EXPORT_ERROR = 'Some errors occurred...';
-var EXPORT_NODATA = 'No data found for your account';
-var EXPORT_UPLOADED = 'Uploaded successfully';
+var EXPORT_FROMOTHER = 'Importēt sesiju(-as) no citiem taimeriem';
+var EXPORT_USERID = 'Lūdzu ievadiet savu kontu (tikai burtus vai ciparus)';
+var EXPORT_INVID = 'Atļauti tikai burti vai cipari!';
+var EXPORT_ERROR = 'Radās dažas kļūdas...';
+var EXPORT_NODATA = 'Jūsu kontam dati netika atrasti';
+var EXPORT_UPLOADED = 'Veiksmīgi augšupielādēts';
 var EXPORT_CODEPROMPT = 'Save this code, or type saved code to import';
 var EXPORT_ONLYOPT = 'Export/Import only Options';
 var EXPORT_ACCOUNT = 'Export Accounts';
@@ -57,11 +57,11 @@ var EXPORT_LOGINWCA = 'Login Using WCA Account';
 var EXPORT_LOGOUTCFM = 'Confirm to log out?';
 var EXPORT_LOGINAUTHED = 'Authorized<br>Fetching Data...';
 var EXPORT_AEXPALERT = 'More than %d solves since last backup';
-var EXPORT_WHICH = 'You have %d file(s), which one should be imported?';
+var EXPORT_WHICH = 'Jums ir %d fails(-i), kuru no tiem importēt?';
 var EXPORT_WHICH_ITEM = '%s solve(s), uploaded at %t';
 var IMPORT_FINAL_CONFIRM = 'This will override all local data! It will modify %d sessions, add %a and remove %r solves at least. Confirm to import data?';
 var BUTTON_SCRAMBLE = 'SCRA-<br>MBLE';
-var BUTTON_TOOLS = 'TOOLS';
+var BUTTON_TOOLS = 'RĪKI';
 var IMAGE_UNAVAILABLE = 'Unavailable for this scramble type';
 var TOOLS_SELECTFUNC = 'Funkcija';
 var TOOLS_CROSS = 'Cross';
@@ -70,17 +70,17 @@ var TOOLS_ROUX1 = 'Roux S1';
 var TOOLS_222FACE = '2x2x2 face';
 var TOOLS_GIIKER = 'Bluetooth Cube';
 var TOOLS_IMAGE = 'draw scramble';
-var TOOLS_STATS = 'Statistics';
-var TOOLS_HUGESTATS = 'cross-session stats';
-var TOOLS_DISTRIBUTION = 'time distribution';
-var TOOLS_TREND = 'time trend';
-var TOOLS_METRONOME = 'metronome';
-var TOOLS_RECONS = 'Reconstruct';
+var TOOLS_STATS = 'Statistika';
+var TOOLS_HUGESTATS = 'start-sesiju statistika';
+var TOOLS_DISTRIBUTION = 'laika sadalījums';
+var TOOLS_TREND = 'laika tendence';
+var TOOLS_METRONOME = 'metronoms';
+var TOOLS_RECONS = 'Rekonstrukcija';
 var TOOLS_RECONS_NODATA = 'No solution found.';
 var TOOLS_RECONS_TITLE = 'insp|exec|turn|tps';
-var TOOLS_TRAINSTAT = 'Training Stat.';
-var TOOLS_BLDHELPER = 'BLD Helper';
-var TOOLS_CFMTIME = 'Confirm time';
+var TOOLS_TRAINSTAT = 'Treniņu stati';
+var TOOLS_BLDHELPER = 'BLD palīgs';
+var TOOLS_CFMTIME = 'Apstiprināt laiku';
 var TOOLS_SOLVERS = 'Solvers';
 var TOOLS_DLYSTAT = 'Daily Statistics';
 var TOOLS_DLYSTAT1 = 'Period|Start of Day|Week';
@@ -117,11 +117,11 @@ var PROPERTY_IMGSIZE = 'Scramble Image Size';
 var PROPERTY_IMGREP = 'Show virtual cube animation when clicking scramble image';
 var TIMER_INSPECT = 'inspekcija';
 var TIMER_SOLVE = 'solve';
-var PROPERTY_USEMOUSE = 'use mouse timer';
-var PROPERTY_TIMEU = 'timer update is';
-var PROPERTY_TIMEU_STR = 'update|0.1s|seconds|inspection|none';
-var PROPERTY_PRETIME = 'time of keeping space down(second(s))';
-var PROPERTY_ENTERING = 'entering in times with';
+var PROPERTY_USEMOUSE = 'izmantot peles taimeri';
+var PROPERTY_TIMEU = 'taimera atjaunināšana ik pēc';
+var PROPERTY_TIMEU_STR = 'atjaunināšana|0.1s|sekundes|inspekcija|nekad';
+var PROPERTY_PRETIME = 'atstarpes taustiņa turēšanas laiks (sekunde(s))';
+var PROPERTY_ENTERING = 'laika ievade ar';
 var PROPERTY_ENTERING_STR = 'timer|typing|stackmat|MoYuTimer|virtual|Bluetooth Cube|qCube|Bluetooth Timer|last layer training';
 var PROPERTY_INTUNIT = 'Unit when entering an integer';
 var PROPERTY_INTUNIT_STR = 'second|centisecond|millisecond';
@@ -131,18 +131,18 @@ var PROPERTY_VIEW = 'UI style is';
 var PROPERTY_VIEW_STR = 'Auto|Mobile|Desktop';
 var PROPERTY_UIDESIGN = 'UI design is';
 var PROPERTY_UIDESIGN_STR = 'Normal|Material design|Normal w/o shadows|Material design w/o shadows';
-var COLOR_EXPORT = 'Please save the string for import';
-var COLOR_IMPORT = 'Please input the string exported';
-var COLOR_FAIL = 'Incorrect Data, Import Failed';
+var COLOR_EXPORT = 'Saglabājiet tekstu importēšanai';
+var COLOR_IMPORT = 'Ievadiet eksportēto tekstu';
+var COLOR_FAIL = 'Kļūdaini Dati, Imports Neizdevās';
 var PROPERTY_FONTCOLOR_STR = 'melns|balts';
 var PROPERTY_COLOR_STR = 'manual|import/export...|random|style1|style2|style3|black|white|style6|solarized dark|solarized light';
-var PROPERTY_FONT = 'select timer\'s font';
+var PROPERTY_FONT = 'taimera fonta izvēle';
 var PROPERTY_FONT_STR = 'random digital|normal|digital1|digital2|digital3|digital4|digital5';
-var PROPERTY_FORMAT = 'laika formātu';
-var PROPERTY_USEKSC = 'use keyboard shortcut';
-var PROPERTY_USEGES = 'use gesture control';
-var PROPERTY_NTOOLS = 'number of tools';
-var PROPERTY_AHIDE = 'Hide All Elements When Timing';
+var PROPERTY_FORMAT = 'laika formāts';
+var PROPERTY_USEKSC = 'izmantot tastatūras saīsni';
+var PROPERTY_USEGES = 'izmantot žestu vadību';
+var PROPERTY_NTOOLS = 'rīku skaits';
+var PROPERTY_AHIDE = 'Paslēpt visus elementus mērīšanas laikā';
 var SCRAMBLE_LAST = 'pēdējais';
 var SCRAMBLE_NEXT = 'nākamais';
 var SCRAMBLE_SCRAMBLE = ' scramble';
@@ -162,7 +162,7 @@ var PROPERTY_GIISOK_MOVE = 'Mark scrambled by doing';
 var PROPERTY_GIISOK_MOVES = 'U4, R4, etc|(U U\')2, (U\' U)2, etc|Never';
 var PROPERTY_GIISBEEP = 'Beep when mark scrambled';
 var PROPERTY_GIIRST = 'Reset bluetooth cube when connect';
-var PROPERTY_GIIRSTS = 'Always|Prompt|Never';
+var PROPERTY_GIIRSTS = 'Vienmēr|Prasīt|Nekad';
 var PROPERTY_GIIMODE = 'Bluetooth Cube Mode';
 var PROPERTY_GIIMODES = 'Normal|Training|Continuous training';
 var PROPERTY_VRCAH = 'Useless pieces in huge cube';
@@ -184,6 +184,7 @@ var scrdata = [
 		['megaminx', "mgmp", -70],
 		['pyraminx', "pyrso", -10],
 		['skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['sq1', "sqrs", 0],
 		['4x4 bld', "444bld", -40],
 		['5x5 bld', "555bld", -60],
@@ -204,7 +205,7 @@ var scrdata = [
 		['3x3x3 for noobs', "333noob", 25],
 		['edges only', "edges", 0],
 		['corners only', "corners", 0],
-		['BLD Helper', "nocache_333bldspec", 0],
+		['BLD palīgs', "nocache_333bldspec", 0],
 		['Pattern Tool', "nocache_333patspec", 0],
 		['3x3 ft', "333ft", 0],
 		['Custom', "333custom", 0]
@@ -341,6 +342,17 @@ var scrdata = [
 		['face turn metric', "sq1h", 40],
 		['twist metric', "sq1t", 20]
 	]],
+	['FTO (Face-Turning Octahedron)', [
+		['random state', "ftoso", 0],
+		['random move', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond random state', "dmdso", 0]
+	]],
 	['===CITS===', [
 		['--', "blank", 0]
 	]],
@@ -420,9 +432,9 @@ var scrdata = [
 		['old style', "prco", 70]
 	]],
 	['Siamese Cube', [
-		['1x1x3 block', "sia113", 25],
-		['1x2x3 block', "sia123", 25],
-		['2x2x2 block', "sia222", 25]
+		['1x1x3 bloks', "sia113", 25],
+		['1x2x3 bloks', "sia123", 25],
+		['2x2x2 bloks', "sia222", 25]
 	]],
 	['Square', [
 		['Square-2', "sq2", 20],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap style', "ufo", 25]
-	]],
-	['FTO (Face-Turning Octahedron)', [
-		['random state', "ftoso", 0],
-		['random move', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond random state', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate random move', "ctico", 60]
@@ -467,15 +468,15 @@ var scrdata = [
 		['Square-1 /,(1,0)', "bsq", 25]
 	]],
 	['Relays', [
-		['lots of 3x3x3s', "r3", 5],
-		['234 relay', "r234", 0],
-		['2345 relay', "r2345", 0],
-		['23456 relay', "r23456", 0],
-		['234567 relay', "r234567", 0],
-		['234 relay (WCA)', "r234w", 0],
-		['2345 relay (WCA)', "r2345w", 0],
-		['23456 relay (WCA)', "r23456w", 0],
-		['234567 relay (WCA)', "r234567w", 0],
+		['daudz 3x3x3', "r3", 5],
+		['234 stafete', "r234", 0],
+		['2345 stafete', "r2345", 0],
+		['23456 stafete', "r23456", 0],
+		['234567 stafete', "r234567", 0],
+		['234 stafete (WCA)', "r234w", 0],
+		['2345 stafete (WCA)', "r2345w", 0],
+		['23456 stafete (WCA)', "r23456w", 0],
+		['234567 stafete (WCA)', "r234567w", 0],
 		['Mini Guildford', "rmngf", 0]
 	]],
 	['===JOKI===', [
@@ -507,22 +508,22 @@ var SCROPT_TITLE = 'Scramble Options';
 var SCROPT_BTNALL = 'Pilns';
 var SCROPT_BTNNONE = 'Clear';
 var SCROPT_EMPTYALT = 'Please select at least one case';
-var STATS_CFM_RESET = 'reset all times in this session?';
-var STATS_CFM_DELSS = 'delete session [%s]?';
+var STATS_CFM_RESET = 'dzēst visus laikus šai sesijā?';
+var STATS_CFM_DELSS = 'dzēst sesiju [%s]?';
 var STATS_CFM_DELMUL = 'The Number Of Deleted Values From Current Index?';
 var STATS_CFM_DELETE = 'izdzēst šo laiku?';
-var STATS_COMMENT = 'Comment';
+var STATS_COMMENT = 'Komentārs';
 var STATS_REVIEW = 'Review';
-var STATS_DATE = 'Date';
+var STATS_DATE = 'Datums';
 var STATS_SSSTAT = '1-solve stat.';
 var STATS_SSRETRY = 'Retry';
 var STATS_CURROUND = 'Current Round Statistics';
 var STATS_CURSESSION = 'Current Session Statistics';
 var STATS_CURSPLIT = 'Phase %d of Current Session Statistics';
-var STATS_EXPORTCSV = 'Export CSV';
-var STATS_SSMGR_TITLE = 'Session Manager';
-var STATS_SSMGR_NAME = 'Vārds';
-var STATS_SSMGR_DETAIL = 'Session Details';
+var STATS_EXPORTCSV = 'Eksportēt CSV';
+var STATS_SSMGR_TITLE = 'Sesijas Pārvalde';
+var STATS_SSMGR_NAME = 'Nosaukums';
+var STATS_SSMGR_DETAIL = 'Sesijas Informācija';
 var STATS_SSMGR_OPS = 'Rename|Create|Split|Merge|Delete|Sort|Merge&Dedupe';
 var STATS_SSMGR_ORDER = 'Order by scramble';
 var STATS_SSMGR_ODCFM = 'Sort all sessions by scramble?';
@@ -530,17 +531,17 @@ var STATS_SSMGR_SORTCFM = '%d solve(s) will be reordered, confirm?';
 var STATS_ALERTMG = 'Merge all times in session [%f] to the end of session [%t]?';
 var STATS_PROMPTSPL = 'Number of latest times split from session [%s]?';
 var STATS_ALERTSPL = 'Should split or leave 1 time at least';
-var STATS_AVG = 'nozīmē';
-var STATS_SUM = 'sum';
+var STATS_AVG = 'vidējā vērtiba';
+var STATS_SUM = 'summa';
 var STATS_SOLVE = 'solve';
 var STATS_TIME = 'laiks';
 var STATS_SESSION = 'Sesija';
-var STATS_SESSION_NAME = 'Rediģēt sesijas vārdu';
-var STATS_SESSION_NAMEC = 'Name of the new session';
+var STATS_SESSION_NAME = 'Rediģēt sesijas nosaukumu';
+var STATS_SESSION_NAMEC = 'Jaunās sesijas nosaukums';
 var STATS_STRING = 'best|current|worst|Generated By csTimer on %Y-%M-%D|solves/total: %d|single|mean of %mk|avg of %mk|Average: %v{ (σ = %sgm)}|Mean: %v|Time List:|solving from %s to %e|Totally spent: %d|target';
-var STATS_PREC = 'time distribution precision';
+var STATS_PREC = 'laika sadalījuma precizitāte';
 var STATS_PREC_STR = 'auto|0.1s|0.2s|0.5s|1s|2s|5s|10s|20s|50s|100s';
-var STATS_TYPELEN = 'list %d type|list %d length|average|mean';
+var STATS_TYPELEN = 'saraksta %d veids|saraksta %d garums|vidējais|vidējā vērtība';
 var STATS_STATCLR = 'Enable session emptying';
 var STATS_ABSIDX = 'Show absolute index in statistics report';
 var STATS_XSESSION_DATE = 'any date|past 24 hours|past 7 days|past 30 days|past 365 days';
@@ -584,7 +585,7 @@ var MODULE_NAMES = {
 	"color": 'krāsa',
 	"timer": 'taimeris',
 	"scramble": 'scramble',
-	"stats": 'statistics',
+	"stats": 'statistika',
 	"tools": 'rīki',
 	"vrc": 'virtual&<br>bluetooth'
 };

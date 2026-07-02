@@ -184,6 +184,7 @@ var scrdata = [
 		['Megaminx', "mgmp", -70],
 		['Pyraminx', "pyrso", -10],
 		['Skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['Square-1', "sqrs", 0],
 		['4x4 bld', "444bld", -40],
 		['5x5 bld', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['Måling av rotering til frontsiden', "sq1h", 40],
 		['Vri metrisk', "sq1t", 20]
 	]],
+	['FTO (Side Vridende Oktahedron)', [
+		['tilfeldig tilstand', "ftoso", 0],
+		['Tilfeldig trekk', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond tilfeldig tilstand', "dmdso", 0]
+	]],
 	['===ANDRE===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap stil', "ufo", 25]
-	]],
-	['FTO (Side Vridende Oktahedron)', [
-		['tilfeldig tilstand', "ftoso", 0],
-		['Tilfeldig trekk', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond tilfeldig tilstand', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate Tilfeldig trekk', "ctico", 60]

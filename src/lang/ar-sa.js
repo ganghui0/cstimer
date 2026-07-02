@@ -184,6 +184,7 @@ var scrdata = [
 		['ميغامينكس', "mgmp", -70],
 		['بيرامينكس', "pyrso", -10],
 		['سكيوب', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['sq1', "sqrs", 0],
 		['4x4 مع معصوب العينين', "444bld", -40],
 		['5x5 مع معصوب العينين', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['face turn metric', "sq1h", 40],
 		['twist metric', "sq1t", 20]
 	]],
+	['FTO (Face-Turning Octahedron)', [
+		['random state', "ftoso", 0],
+		['random move', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond random state', "dmdso", 0]
+	]],
 	['===آخر===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap style', "ufo", 25]
-	]],
-	['FTO (Face-Turning Octahedron)', [
-		['random state', "ftoso", 0],
-		['random move', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond random state', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate random move', "ctico", 60]

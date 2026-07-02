@@ -25,11 +25,11 @@ var PROPERTY_SCRLIM = 'Omezit výšku v oblasti scramblu';
 var PROPERTY_SCRALIGN = 'Zarovnání scramble oblasti';
 var PROPERTY_SCRALIGN_STR = 'střed|vlevo|vpravo';
 var PROPERTY_SCRWRAP = 'Scramble Wrap';
-var PROPERTY_SCRWRAP_STR = 'Balanced|Normal';
+var PROPERTY_SCRWRAP_STR = 'Balancované|Normální';
 var PROPERTY_SCRNEUT = 'Barevně neutrální';
 var PROPERTY_SCRNEUT_STR = 'Žádné|Jedna strana|Dvojité strany|Šest stran';
 var PROPERTY_SCREQPR = 'Probabilities for training-scramble states';
-var PROPERTY_SCREQPR_STR = 'Actual|Equal|Random order';
+var PROPERTY_SCREQPR_STR = 'Opravdové|Rovné|Náhodné pořadí';
 var PROPERTY_SCRFAST = 'Použít rychlí scramble pro 4x4x4(neoficiální)';
 var PROPERTY_SCRKEYM = 'Klíčovy krok pohybů v zamíchání';
 var PROPERTY_SCRCLK = 'Akce při kliknutí na scramble';
@@ -56,9 +56,9 @@ var EXPORT_LOGINGGL = 'Přihlásit Pomocí Google Účtu';
 var EXPORT_LOGINWCA = 'Přihlásit Pomocí WCA Účtu';
 var EXPORT_LOGOUTCFM = 'Potvrdit odhlášení?';
 var EXPORT_LOGINAUTHED = 'Autorizováno<br>Načítání Dat...';
-var EXPORT_AEXPALERT = 'More than %d solves since last backup';
-var EXPORT_WHICH = 'You have %d file(s), which one should be imported?';
-var EXPORT_WHICH_ITEM = '%s solve(s), uploaded at %t';
+var EXPORT_AEXPALERT = 'Více než %d vyřešení od poslední zálohy';
+var EXPORT_WHICH = 'Máš %d souborů. Které mají být importovány?';
+var EXPORT_WHICH_ITEM = '%s řešení, nahráno %t';
 var IMPORT_FINAL_CONFIRM = 'Toto přepíše všechna lokální data! Upraví %d relací, přidá alespoň %a odstraní %r řešení. Potvrdit import dat?';
 var BUTTON_SCRAMBLE = 'Scramble';
 var BUTTON_TOOLS = 'NÁSTROJE';
@@ -78,28 +78,28 @@ var TOOLS_METRONOME = 'metronom';
 var TOOLS_RECONS = 'Rekonstruovat';
 var TOOLS_RECONS_NODATA = 'Nebylo nalezeno žádné řešení.';
 var TOOLS_RECONS_TITLE = 'insp|exec|turn|tps';
-var TOOLS_TRAINSTAT = 'Training Stat.';
-var TOOLS_BLDHELPER = 'BLD Helper';
+var TOOLS_TRAINSTAT = 'Trénovací stat.';
+var TOOLS_BLDHELPER = 'Pomocník BLD';
 var TOOLS_CFMTIME = 'Potvrďte čas';
 var TOOLS_SOLVERS = 'Solvery';
-var TOOLS_DLYSTAT = 'Daily Statistics';
+var TOOLS_DLYSTAT = 'Denní statistiky';
 var TOOLS_DLYSTAT1 = 'Period|Start of Day|Week';
-var TOOLS_DLYSTAT_OPT1 = 'day|week|month|year';
+var TOOLS_DLYSTAT_OPT1 = 'den|týden|měsíc|rok';
 var TOOLS_DLYSTAT_OPT2 = 'Ne|Po|Út|St|Čt|Pá|So';
 var TOOLS_SYNCSEED = 'Společné zamíchání';
 var TOOLS_SYNCSEED_SEED = 'Seed';
 var TOOLS_SYNCSEED_INPUT = 'Vstupní seed';
 var TOOLS_SYNCSEED_30S = 'Použít 30s seed';
-var TOOLS_SYNCSEED_HELP = 'Při zapnutí bude zamíchání závislé pouze na seedu a nastavení zamíchání.';
+var TOOLS_SYNCSEED_HELP = 'Při zapnutí bude scramble závislý pouze na seedu a nastavení scramblu.';
 var TOOLS_SYNCSEED_DISABLE = 'Vypnout aktuální seed?';
 var TOOLS_SYNCSEED_INPUTA = 'Vložte hodnotu (a-zA-Z0-9) jako seed';
-var TOOLS_BATTLE = 'Online battle';
-var TOOLS_BATTLE_HEAD = 'Room|Join Room';
+var TOOLS_BATTLE = 'Online souboj';
+var TOOLS_BATTLE_HEAD = 'Místnost|Připojit se k místnosti';
 var TOOLS_BATTLE_TITLE = 'Rank|Status|Time';
-var TOOLS_BATTLE_STATUS = 'Ready|Inspect|Solving|Solved|Lost';
+var TOOLS_BATTLE_STATUS = 'Připraven|Inspekce|Řešení|Vyřešeno|Prohrál';
 var TOOLS_BATTLE_INFO = 'Join a battle room with your friend, then you will battle together.';
-var TOOLS_BATTLE_JOINALERT = 'Please input the room ID';
-var TOOLS_BATTLE_LEAVEALERT = 'Leave current room';
+var TOOLS_BATTLE_JOINALERT = 'Prosím zadej ID místnosti';
+var TOOLS_BATTLE_LEAVEALERT = 'Odejít z aktuální místnosti';
 var OLCOMP_UPDATELIST = 'Aktualizovat seznam soutěží';
 var OLCOMP_VIEWRESULT = 'Zobrazit výsledek';
 var OLCOMP_VIEWMYRESULT = 'Moje historie';
@@ -114,7 +114,7 @@ var OLCOMP_WCAACCOUNT = 'Účet WCA';
 var OLCOMP_ABORT = 'Zrušit soutěž a ukázat výsledky?';
 var OLCOMP_WITHANONYM = 'S Anonymem';
 var PROPERTY_IMGSIZE = 'Velikost zamíchaného obrázku';
-var PROPERTY_IMGREP = 'Show virtual cube animation when clicking scramble image';
+var PROPERTY_IMGREP = 'Ukázat animace virtuální kostky při kliknutí na obrázek scramblu';
 var TIMER_INSPECT = 'zkontrolovat';
 var TIMER_SOLVE = 'vyřešit';
 var PROPERTY_USEMOUSE = 'použít časovač pomocí myši';
@@ -140,7 +140,7 @@ var PROPERTY_FONT = 'vyberte písmo časovače';
 var PROPERTY_FONT_STR = 'náhodně digitální|normální|digitální1|digitánlí2|digitální3|digitální4|digitální5';
 var PROPERTY_FORMAT = 'formát času';
 var PROPERTY_USEKSC = 'použít klávesové zkratky';
-var PROPERTY_USEGES = 'use gesture control';
+var PROPERTY_USEGES = 'použít ovládání gesty';
 var PROPERTY_NTOOLS = 'počet nástrojů';
 var PROPERTY_AHIDE = 'Skrýt všechny prvky při časování';
 var SCRAMBLE_LAST = 'poslední';
@@ -149,9 +149,9 @@ var SCRAMBLE_SCRAMBLE = ' scramble';
 var SCRAMBLE_SCRAMBLING = 'Scrambling';
 var SCRAMBLE_LENGTH = 'délka';
 var SCRAMBLE_INPUT = 'vstupní zamíchání';
-var SCRAMBLE_INPUTTYPE = 'Scramble type';
+var SCRAMBLE_INPUTTYPE = 'Typ scramblu';
 var PROPERTY_VRCSPEED = 'VRS základní rychlost (tps)';
-var PROPERTY_VRCORI = 'Virtual cube orientation';
+var PROPERTY_VRCORI = 'Orientace virtuální kostky';
 var PROPERTY_VRCMP = 'vícefázové';
 var PROPERTY_VRCMPS = 'Nic|CFOP|CF+OP|CFFFFOP|CFFFFOOPP|Roux';
 var PROPERTY_GIIKERVRC = 'Zobrazit virtuální Giiker kostku';
@@ -163,10 +163,10 @@ var PROPERTY_GIISOK_MOVES = 'U4, R4, atd...|(U U\')2, (U\' U)2, atd...|Nikdy';
 var PROPERTY_GIISBEEP = 'Pípnout když je zamícháno';
 var PROPERTY_GIIRST = 'Restartovat Giiker kostku při připojení';
 var PROPERTY_GIIRSTS = 'Vždy|rychle|nikdy';
-var PROPERTY_GIIMODE = 'Bluetooth Cube Mode';
+var PROPERTY_GIIMODE = 'Režim Bluetooth kostky';
 var PROPERTY_GIIMODES = 'Normal|Training|Continuous training';
 var PROPERTY_VRCAH = 'Useless pieces in huge cube';
-var PROPERTY_VRCAHS = 'Hide|Border|Color|Show';
+var PROPERTY_VRCAHS = 'Schovat|Ohraničení|Barva|Ukázat';
 var CONFIRM_GIIRST = 'Resetovat Giiker kostku jako zamíchanou?';
 var PROPERTY_GIIAED = 'Automatická detekce hardwarové chyby';
 var scrdata = [
@@ -184,6 +184,7 @@ var scrdata = [
 		['megaminx', "mgmp", -70],
 		['pyraminx', "pyrso", -10],
 		['skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['square-1', "sqrs", 0],
 		['4x4 bld', "444bld", -40],
 		['5x5 bld', "555bld", -60],
@@ -192,7 +193,7 @@ var scrdata = [
 	['Vstup', [
 		['Extern', "input", 0],
 		['Soutěž', "remoteComp", 0],
-		['Online battle', "remoteBattle", 0],
+		['Online souboj', "remoteBattle", 0],
 		['Remote', "remoteOther", 0]
 	]],
 	['===WCA===', [
@@ -204,10 +205,10 @@ var scrdata = [
 		['3x3x3 pro nooby', "333noob", 25],
 		['pouze hrany', "edges", 0],
 		['pouze rohy', "corners", 0],
-		['BLD Helper', "nocache_333bldspec", 0],
+		['Pomocník BLD', "nocache_333bldspec", 0],
 		['Pattern Tool', "nocache_333patspec", 0],
 		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['Vlastní', "333custom", 0]
 	]],
 	['3x3x3 CFOP', [
 		['PLL', "pll", 0],
@@ -228,7 +229,7 @@ var scrdata = [
 		['EOLine', "eoline", 0],
 		['EO Cross', "eocross", 0],
 		['jednoduchý kříž', "easyc", 3],
-		['easy xcross', "easyxc", 4]
+		['jednoduchý xkříž', "easyxc", 4]
 	]],
 	['3x3x3 Roux', [
 		['2nd Block', "sbrx", 0],
@@ -341,6 +342,17 @@ var scrdata = [
 		['přední metrické otočení', "sq1h", 40],
 		['metrický twist', "sq1t", 20]
 	]],
+	['PSO (Přední Soutěžní Osmistěn)', [
+		['náhodný stav', "ftoso", 0],
+		['náhodný tah', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond náhodný stav', "dmdso", 0]
+	]],
 	['=== OSTATNÍ ===', [
 		['--', "blank", 0]
 	]],
@@ -434,17 +446,6 @@ var scrdata = [
 	['UFO', [
 		['Jaap style', "ufo", 25]
 	]],
-	['PSO (Přední Soutěžní Osmistěn)', [
-		['náhodný stav', "ftoso", 0],
-		['náhodný tah', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond náhodný stav', "dmdso", 0]
-	]],
 	['Icosahedron', [
 		['Icosamate náhodný tah', "ctico", 60]
 	]],
@@ -503,8 +504,8 @@ var SCRAMBLE_NOOBST = [
 	['otočit přední stranu', 'otočit zadní stranu']
 ];
 var SCRAMBLE_NOOBSS = ' po směru hodin po 90 stupních,| proti směru hodin po 90 stupních,| po 180 supních,';
-var SCROPT_TITLE = 'Scramble Options';
-var SCROPT_BTNALL = 'Full';
+var SCROPT_TITLE = 'Možnosti scramblu';
+var SCROPT_BTNALL = 'Plné';
 var SCROPT_BTNNONE = 'Vyčistit';
 var SCROPT_EMPTYALT = 'Vyberte prosím alespoň jeden případ';
 var STATS_CFM_RESET = 'resetovat všechny časy v této relaci?';
@@ -531,7 +532,7 @@ var STATS_ALERTMG = 'Spojit všechny časy v relaci [%f] do konce relace[%t]?';
 var STATS_PROMPTSPL = 'Spojit počet posledních časů z relace[%s]?';
 var STATS_ALERTSPL = 'Mělo by se rozdělit nebo nechat alespoň 1';
 var STATS_AVG = 'průměr';
-var STATS_SUM = 'sum';
+var STATS_SUM = 'suma';
 var STATS_SOLVE = 'vyřešit';
 var STATS_TIME = 'čas';
 var STATS_SESSION = 'Session';
@@ -549,7 +550,7 @@ var STATS_XSESSION_SCR = 'jakékoliv zamíchání';
 var STATS_XSESSION_CALC = 'Calc';
 var STATS_RSFORSS = 'Zobrazit statistiku při kliknutí na číslo solvu';
 var PROPERTY_PRINTSCR = 'zobrazit zamíchání ve statistikách';
-var PROPERTY_PRINTCOMM = 'print comment(s) in statistics';
+var PROPERTY_PRINTCOMM = 'zobrazit komentáře ve statistikách';
 var PROPERTY_PRINTDATE = 'zobrazit datum složení ve statistikách';
 var PROPERTY_SUMMARY = 'zobrazit shrnutí před časovím listem';
 var PROPERTY_IMRENAME = 'přejmenovat relaci ihned po vytvoření';
@@ -557,22 +558,22 @@ var PROPERTY_SCR2SS = 'vytvořit novou relaci při změně typu zamíchání';
 var PROPERTY_SS2SCR = 'obnovit typ zamíchání při změně relace';
 var PROPERTY_SS2PHASES = 'obnovit vícefázové časování při relaci';
 var PROPERTY_STATINV = 'Obrátit časový list';
-var PROPERTY_STATSSUM = 'Show sum in time list';
-var PROPERTY_STATTHRES = 'Show target time for session best';
-var PROPERTY_STATBPA = 'Show best possible average (BPA)';
-var PROPERTY_STATWPA = 'Show worst possible average (WPA)';
+var PROPERTY_STATSSUM = 'Ukázat sumu v seznamu časů';
+var PROPERTY_STATTHRES = 'Ukázat cílový čas pro nejlepší čas relace';
+var PROPERTY_STATBPA = 'Ukázat nejlepší možný průměr (BPA)';
+var PROPERTY_STATWPA = 'Ukázat nejhorší možný průměr (WPA)';
 var PROPERTY_STATAL = 'Statistické indikátory';
 var PROPERTY_STATALU = 'Přispůsobený statický indikátor';
-var PROPERTY_HLPBS = 'Highlight PBs';
-var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
+var PROPERTY_HLPBS = 'Zvýraznit PB';
+var PROPERTY_HLPBS_STR = 'Tmavě oranžová jako WCA|Jako barva odkazu|Tučné|Žádné';
 var PROPERTY_DELMUL = 'Povolit Více Odstranění';
 var PROPERTY_TOOLSFUNC = 'Vybraná Funkce';
 var PROPERTY_TRIM = 'Počet nejhorších/nejlepších nepočítaných solvů';
 var PROPERTY_TRIMR = 'Počet složení použitích na nejhorší straně';
 var PROPERTY_TRIM_MED = 'Medián';
 var PROPERTY_STKHEAD = 'Použít Informace O Stavu Stackmatu';
-var PROPERTY_TOOLPOS = 'Tools panel position';
-var PROPERTY_TOOLPOS_STR = 'Bottom|Float|Top';
+var PROPERTY_TOOLPOS = 'Pozice panelu nástrojů';
+var PROPERTY_TOOLPOS_STR = 'Dole|Plovoucí|Nahoře';
 var PROPERTY_HIDEFULLSOL = 'Ukázat řešení postupně';
 var PROPERTY_IMPPREV = 'Importovat ne-poslední data';
 var PROPERTY_AUTOEXP = 'Automatický export dat (po 100 solvech)';
@@ -594,7 +595,7 @@ var BGIMAGE_OPACITY = 'průhlednost pozadí obrázku';
 var BGIMAGE_IMAGE = 'pozadí obrázku';
 var BGIMAGE_IMAGE_STR = 'žádný|manuální|CCT';
 var SHOW_AVG_LABEL = 'Zobrazit Průměrný Popisek';
-var SHOW_DIFF_LABEL = 'Show Difference Label';
+var SHOW_DIFF_LABEL = 'Ukázat značku rozdílů';
 var SHOW_DIFF_LABEL_STR = '-Zelená+Červená|-Červená+Zelená|Normální|Žádný';
 var USE_LOGOHINT = 'Upozornění v logu';
 var TOOLS_SCRGEN = 'Generátor Zamíchání';
@@ -603,29 +604,29 @@ var SCRGEN_PRE = 'předpona';
 var SCRGEN_GEN = 'Generovat Zamíchání!';
 var VRCREPLAY_TITLE = 'Virtual Replay';
 var VRCREPLAY_ORI = 'raw ori|auto ori';
-var VRCREPLAY_SHARE = 'share link';
-var GIIKER_CONNECT = 'Click to connect';
-var GIIKER_RESET = 'Reset (Mark Solved)';
-var GIIKER_REQMACMSG = 'Please enter the MAC address of your smart hardware (xx:xx:xx:xx:xx:xx). You can find the MAC address through chrome://bluetooth-internals/#devices, or modify following options to let csTimer automatically obtain it:\nChrome: Turn on chrome://flags/#enable-experimental-web-platform-features\nBluefy: Turn on Enable BLE Advertisements';
-var GIIKER_NOBLEMSG = 'Bluetooth API is not available. Ensure https access, check bluetooth is enabled on your device, and try chrome with chrome://flags/#enable-experimental-web-platform-features enabled';
-var PROPERTY_SHOWAD = 'Show advertisements (take effect after reload)';
-var PROPERTY_GIIORI = 'Cube orientation';
-var LGHINT_INVALID = 'Invalid Value!';
-var LGHINT_NETERR = 'Network Error!';
-var LGHINT_SERVERR = 'Server Error!';
+var VRCREPLAY_SHARE = 'sdílet odkaz';
+var GIIKER_CONNECT = 'Klikni pro připojení';
+var GIIKER_RESET = 'Resetovat (označit jako vyřešené)';
+var GIIKER_REQMACMSG = 'Prosím zadej MAC adresu svého chytrého hardwaru (xx:xx:xx:xx:xx:xx). Můžeš ji najít pomocí chrome://bluetooth-internals/#devices, nebo uprav následující nastavení aby csTimer ji mohl automaticky detekovat:\nChrome: Zapni chrome://flags/#enable-experimental-web-platform-features\nBluefy: Zapni "Enable BLE Advertisements"';
+var GIIKER_NOBLEMSG = 'Bluetooth API není dostupná. Ujisti se přístupem https, zkontroluj zapnutý bluetooth na tvém zařízení a zkus chrome se zapnutým chrome://flags/#enable-experimental-web-platform-features';
+var PROPERTY_SHOWAD = 'Ukazovat reklamy (restart vyžadován)';
+var PROPERTY_GIIORI = 'Orientace kostky';
+var LGHINT_INVALID = 'Neplatná hodnota!';
+var LGHINT_NETERR = 'Chyba sítě!';
+var LGHINT_SERVERR = 'Chyba serveru!';
 var LGHINT_SUBMITED = 'Submitted';
-var LGHINT_SSBEST = 'Session best %s!';
-var LGHINT_SCRCOPY = 'Scramble copied';
+var LGHINT_SSBEST = 'Nejlepší čas relace %s!';
+var LGHINT_SCRCOPY = 'Scramble zkopírován';
 var LGHINT_LINKCOPY = 'Share link copied';
-var LGHINT_SOLVCOPY = 'Solve copied';
-var LGHINT_SORT0 = 'Already sorted';
-var LGHINT_IMPORTED = 'Import %d session(s)';
-var LGHINT_IMPORT0 = 'No session imported';
-var LGHINT_BTCONSUC = 'Bluetooth successfully connected';
-var LGHINT_BTDISCON = 'Bluetooth disconnected';
-var LGHINT_BTNOTSUP = 'Not support your smart cube';
-var LGHINT_BTINVMAC = 'Not a valid mac address, cannot connect to your smart cube';
-var LGHINT_AEXPABT = 'Auto export abort';
-var LGHINT_AEXPSUC = 'Auto export success';
-var LGHINT_AEXPFAL = 'Auto export failed';
+var LGHINT_SOLVCOPY = 'Vyřešit zkopírováné';
+var LGHINT_SORT0 = 'Už seřazeno';
+var LGHINT_IMPORTED = 'Importovat %d relací';
+var LGHINT_IMPORT0 = 'Žádná relace není importována';
+var LGHINT_BTCONSUC = 'Bluetooth kostka připojena';
+var LGHINT_BTDISCON = 'Bluetooth odpojen';
+var LGHINT_BTNOTSUP = 'Není podpora pro vaši chytrou kostku';
+var LGHINT_BTINVMAC = 'Není platná MAC adresa, nepodařilo se připojit k vaší chytré kostce';
+var LGHINT_AEXPABT = 'Zrušení automatického exportu';
+var LGHINT_AEXPSUC = 'Automatický export uspěl';
+var LGHINT_AEXPFAL = 'Automatický export selhal';
 var EASY_SCRAMBLE_HINT = 'Change length to limit upper bound of solution length, input 2 digits to limit both lower (<= 8) and upper bound';
