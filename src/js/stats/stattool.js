@@ -31,14 +31,23 @@ var stattool = execMain(function(kpretty, round, kpround) {
 		var hasTable = false;
 		var tableHead = '<table class="table"><tr><td></td><td>' + hlstr[1] + '</td><td>' + hlstr[0] + '</td></tr>';
 		for (var j = 0; j < avgSizes.length; j++) {
-			var size = Math.abs(avgSizes[j]);
-			if (times_stats_table.timesLen >= size) {
+			var spec = avgSizes[j];
+			if (spec.session) {
+				if (times_stats_table.timesLen != 0) {
+					hasTable || (hasTable = true, s.push(tableHead));
+					s.push('<tr><td>' + TimeStat.specName(spec));
+					s.push('<td><span class="click" data="ps' + j + '">' + prettyFunc[0](times_stats_table.sessionStat(spec)) + '</span></td>');
+					s.push('<td>-</td></tr>');
+				}
+				continue;
+			}
+			if (times_stats_table.timesLen >= spec.size) {
 				hasTable || (hasTable = true, s.push(tableHead));
-				s.push('<tr><td>' + hlstr[7 - (avgSizes[j] >>> 31)].replace("%mk", size));
-				s.push('<td><span class="click" data="c' + 'am' [avgSizes[j] >>> 31] + j + '">' + prettyFunc[1](times_stats_table.lastAvg[j][0]) + " (σ=" + stats.trim(times_stats_table.lastAvg[j][1], 2) +
-					')</span></td>');
-				s.push('<td><span class="click" data="b' + 'am' [avgSizes[j] >>> 31] + j + '">' + prettyFunc[1](times_stats_table.bestAvg(j, 0)) + " (σ=" + stats.trim(times_stats_table.bestAvg(j, 1), 2) +
-					')</span></td></tr>');
+				s.push('<tr><td>' + (spec.kind == 'p' ? TimeStat.specName(spec) : hlstr[spec.kind == 'm' ? 6 : 7].replace("%mk", spec.size)));
+				s.push('<td><span class="click" data="c' + spec.kind + j + '">' + prettyFunc[1](times_stats_table.lastAvg[j][0]) +
+					(spec.kind == 'p' ? '' : " (σ=" + stats.trim(times_stats_table.lastAvg[j][1], 2) + ")") + '</span></td>');
+				s.push('<td><span class="click" data="b' + spec.kind + j + '">' + prettyFunc[1](times_stats_table.bestAvg(j, 0)) +
+					(spec.kind == 'p' ? '' : " (σ=" + stats.trim(times_stats_table.bestAvg(j, 1), 2) + ")") + '</span></td></tr>');
 			}
 		}
 		hasTable && s.push('</table>');
@@ -68,7 +77,23 @@ var stattool = execMain(function(kpretty, round, kpround) {
 		var commentInput = $('<input type="text">').css('width', '8em');
 		var saveButton = $('<input type="button">').val(STATS_COMMENT);
 		var table = $('<table class="table">');
+		var statSelect = $('<select>');
 		var isEnable = false;
+
+		// options: the session mean (the original behaviour) plus every configured indicator
+		function genStatSelect() {
+			var avgSizes = stats.getTimesStatsTable().avgSizes;
+			var cur = statSelect.val();
+			statSelect.empty().append($('<option>').val('m').html(STATS_AVG));
+			for (var j = 0; j < avgSizes.length; j++) {
+				statSelect.append($('<option>').val('i' + j).html(TimeStat.specName(avgSizes[j])));
+			}
+			statSelect.val(cur);
+			if (statSelect.val() == null) {
+				statSelect.val('m');
+			}
+			return avgSizes;
+		}
 
 		function normalizeComment(comment) {
 			return $.trim((comment || '').replace(/\s+/g, ' ')).toLowerCase();
@@ -141,12 +166,17 @@ var stattool = execMain(function(kpretty, round, kpround) {
 				return b.idxs.length - a.idxs.length || cmpLabel(a.key, b.key);
 			});
 
+			var avgSizes = genStatSelect();
+			var sel = statSelect.val();
+			var spec = sel == 'm' ? null : avgSizes[~~sel.slice(1)];
+			var isPct = spec && spec.kind == 'p';
+
 			table.empty().append($('<tr>')
 				.append($('<th>').text(STATS_COMMENT))
 				.append($('<th>').text('N'))
 				.append($('<th>').text(STATS_SOLVE))
 				.append($('<th>').text(hlstr[0]))
-				.append($('<th>').text(STATS_AVG))
+				.append($('<th style="padding:0">').append(statSelect))
 			);
 
 			if (timesLen == 0) {
@@ -156,16 +186,20 @@ var stattool = execMain(function(kpretty, round, kpround) {
 
 			for (var i = 0; i < list.length; i++) {
 				var group = list[i];
-				var statObj = new TimeStat([], group.idxs.length, groupTimeAt.bind(null, group.idxs));
+				var statObj = new TimeStat(spec ? [spec] : [], group.idxs.length, groupTimeAt.bind(null, group.idxs));
 				var statRet = statObj.getAllStats();
 				var solved = group.idxs.length - statRet[0];
 				var share = stats.trim(group.idxs.length / timesLen * 100, 1) + '%';
+				// whole-session indicators apply across the group, windowed ones report their best
+				var val = !solved ? null :
+					!spec ? statRet[1] :
+					spec.session ? statObj.sessionStat(spec) : statObj.bestAvg(0, 0);
 				table.append($('<tr>')
 					.append($('<td>').text(group.key || '(blank)'))
 					.append($('<td>').text(group.idxs.length + ' (' + share + ')'))
 					.append($('<td>').text(solved + '/' + group.idxs.length))
 					.append($('<td>').text(solved ? kpretty(statObj.bestTime) : 'DNF'))
-					.append($('<td>').text(solved ? kpround(statRet[1]) : 'N/A'))
+					.append($('<td>').text(val == null || val < 0 ? 'N/A' : (isPct ? kpretty : kpround)(val)))
 				);
 			}
 		}
@@ -178,6 +212,7 @@ var stattool = execMain(function(kpretty, round, kpround) {
 				return;
 			}
 			editDiv.empty().append(latestLabel, commentInput.unbind('change keydown').change(saveLatestComment).keydown(procInputKey), saveButton.unbind('click').click(saveLatestComment));
+			statSelect.unbind('change').change(update);
 			fdiv.empty().append(div.empty().append(editDiv, table));
 			update();
 		}
@@ -191,7 +226,7 @@ var stattool = execMain(function(kpretty, round, kpround) {
 	$(function() {
 		if (typeof tools != "undefined") {
 			tools.regTool('stats', TOOLS_STATS, execFunc);
-			tools.regTool('commentstat', 'Comment Statistics', commentStat.execFunc);
+			tools.regTool('commentstat', 'Filter by Comment', commentStat.execFunc);
 		}
 		stats.regUtil('stattool', updateInfo);
 		stats.regUtil('commentstat', commentStat.update);

@@ -3,10 +3,72 @@
 var TimeStat = execMain(function() {
 
 	function TimeStat(avgSizes, timesLen, timeAt, timeSort) {
-		this.avgSizes = avgSizes.slice();
+		this.avgSizes = avgSizes.map(TimeStat.normSpec);
 		this.timeAt = timeAt;
 		this.timeSort = timeSort || TimeStat.dnfsort;
 		this.reset(timesLen);
+	}
+
+	// A statistical indicator is {kind: 'a'|'m'|'p', size: n, q: percentile}.
+	//   ao12 => {kind: 'a', size: 12}          trimmed mean of last 12
+	//   mo3  => {kind: 'm', size: 3}           plain mean of last 3
+	//   p50o12 => {kind: 'p', size: 12, q: 50} 50th pct of last 12
+	//   p90  => {kind: 'p', size: 0, q: 90, session: true}  90th pct of the session
+	// Legacy callers pass signed ints, positive => average, negative => mean.
+	TimeStat.normSpec = function(spec) {
+		if (typeof spec != 'number') {
+			return spec;
+		}
+		return { kind: spec < 0 ? 'm' : 'a', size: Math.abs(spec) };
+	}
+
+	var specre = /^(?:([am])o(\d+)|p(\d+)(?:o(\d+))?)$/;
+
+	TimeStat.parseSpec = function(str) {
+		var m = specre.exec(str);
+		if (!m) {
+			return null;
+		}
+		if (m[1]) {
+			var size = ~~m[2];
+			return size < 1 ? null : { kind: m[1], size: size };
+		}
+		var q = ~~m[3];
+		if (q < 0 || q > 100) {
+			return null;
+		}
+		if (m[4] === undefined) { // session scoped, no fixed window
+			return { kind: 'p', size: 0, q: q, session: true };
+		}
+		var size = ~~m[4];
+		return size < 1 ? null : { kind: 'p', size: size, q: q };
+	}
+
+	TimeStat.specName = function(spec) {
+		if (spec.kind != 'p') {
+			return spec.kind + 'o' + spec.size;
+		}
+		return 'p' + spec.q + (spec.session ? '' : 'o' + spec.size);
+	}
+
+	// nearest-rank percentile, 0-based, matching the ceil() convention getNTrim uses.
+	// Multiply before dividing: n / 100 * q is inexact when the product is a whole
+	// number (28 / 100 * 50 === 14.000000000000002), which rounds the rank up by one.
+	function pctRank(n, q) {
+		return Math.min(n - 1, Math.max(0, Math.ceil(n * q / 100) - 1));
+	}
+
+	// Reduce a sorted window (an sbtree holding exactly `size` entries) to
+	// [value, stddev, trimLowBound, trimHighBound].
+	function statOfTree(rbt, spec, size) {
+		if (spec.kind == 'p') {
+			var k = pctRank(size, spec.q);
+			var val = rbt.rankOf(-1) <= k ? -1 : rbt.rank(k);
+			return [val, 0, val, val];
+		}
+		var trimlr = spec.kind == 'm' ? [0, 0] : getNTrimLR(size);
+		var avgstd = rbt.avgstd(trimlr[0], size - trimlr[1]);
+		return [(rbt.rankOf(-1) < size - trimlr[1]) ? -1 : avgstd[0], avgstd[1] / 1000, rbt.rank(trimlr[0] - 1), rbt.rank(size - trimlr[1])];
 	}
 
 	function getNTrim(n, ntrim) {
@@ -46,6 +108,29 @@ var TimeStat = execMain(function() {
 		this.genStats();
 		var numdnf = this.timesLen - this.tree.rankOf(-1);
 		return [numdnf, (numdnf == this.timesLen) ? -1 : this.tree.avgstd(0, this.timesLen - numdnf)[0]];
+	}
+
+	// Whole-session indicators. The full-session order-statistic tree is already
+	// maintained, so this is O(log n) and needs no incremental bookkeeping.
+	// Returns -1 (DNF) when the requested rank falls inside the DNF block.
+	TimeStat.prototype.sessionStat = function(spec) {
+		this.genStats();
+		var n = this.timesLen;
+		if (n == 0) {
+			return null;
+		}
+		var nvalid = this.tree.rankOf(-1);
+		if (spec.kind == 'p') {
+			var k = pctRank(n, spec.q);
+			return nvalid <= k ? -1 : this.tree.rank(k);
+		}
+		return nvalid == 0 ? -1 : this.tree.avgstd(0, nvalid)[0];
+	}
+
+	// index of the solve currently sitting at a session-scoped indicator
+	TimeStat.prototype.sessionStatIndex = function(spec) {
+		var val = this.sessionStat(spec);
+		return val == null || val == -1 ? -1 : this.tree.find(val);
 	}
 
 	TimeStat.prototype.genStats = function() {
@@ -125,7 +210,11 @@ var TimeStat = execMain(function() {
 		}
 
 		for (var j = 0; j < this.avgSizes.length; j++) {
-			var size = Math.abs(this.avgSizes[j]);
+			var spec = this.avgSizes[j];
+			if (spec.session) { // whole-session stats read off this.tree, nothing to maintain
+				continue;
+			}
+			var size = spec.size;
 			if (this.timesLen < size - 1) {
 				continue;
 			}
@@ -142,12 +231,10 @@ var TimeStat = execMain(function() {
 			} else {
 				rbt.remove(this.timeAt(i - size)).insert(t, i);
 			}
-			var trimlr = this.avgSizes[j] < 0 ? [0, 0] : getNTrimLR(size);
-			var avgstd = rbt.avgstd(trimlr[0], size - trimlr[1]);
-			var curVal = [(rbt.rankOf(-1) < size - trimlr[1]) ? -1 : avgstd[0], avgstd[1] / 1000, rbt.rank(trimlr[0] - 1), rbt.rank(size - trimlr[1])];
+			var curVal = statOfTree(rbt, spec, size);
 			if (this.timeSort(curVal[0], this.bestAvg(j, 0)) < 0) {
 				if (this.bestAvg(j, 0) >= 0 && !next) {
-					bestHintList.push((this.avgSizes[j] > 0 ? "ao" : "mo") + size);
+					bestHintList.push(TimeStat.specName(spec));
 				}
 				this._bestAvg[j].push(curVal.concat([i - size + 1]));
 			}
@@ -180,7 +267,11 @@ var TimeStat = execMain(function() {
 			this.worstTimeIndex = this.tree.find(this.worstTime);
 		}
 		for (var j = 0; j < this.avgSizes.length; j++) {
-			var size = Math.abs(this.avgSizes[j]);
+			var spec = this.avgSizes[j];
+			if (spec.session) {
+				continue;
+			}
+			var size = spec.size;
 			var rbt = this.treesAvg[j];
 			if (this.timesLen < size - 1) {
 				continue;
@@ -195,10 +286,7 @@ var TimeStat = execMain(function() {
 			}
 			rbt.remove(t).insert(this.timeAt(i - size), i - size);
 			if (!next) {
-				var trimlr = this.avgSizes[j] < 0 ? [0, 0] : getNTrimLR(size);
-				var avgstd = rbt.avgstd(trimlr[0], size - trimlr[1]);
-				var curVal = [(rbt.rankOf(-1) < size - trimlr[1]) ? -1 : avgstd[0], avgstd[1] / 1000, rbt.rank(trimlr[0] - 1), rbt.rank(size - trimlr[1])];
-				this.lastAvg[j] = curVal;
+				this.lastAvg[j] = statOfTree(rbt, spec, size);
 			}
 			if (this.bestAvg(j, 4) == i - size + 1) {
 				this._bestAvg[j].pop();
@@ -214,11 +302,12 @@ var TimeStat = execMain(function() {
 	TimeStat.prototype.getThres = function() {
 		var thres = [];
 		for (var j = 0; j < this.avgSizes.length; j++) {
-			var size = Math.abs(this.avgSizes[j]);
-			if (this.timesLen < size) {
-				continue;
+			var spec = this.avgSizes[j];
+			var size = spec.size;
+			if (spec.session || spec.kind == 'p' || this.timesLen < size) {
+				continue; // no meaningful "time to beat" for an order statistic
 			}
-			var trimlr = this.avgSizes[j] < 0 ? [0, 0] : getNTrimLR(size);
+			var trimlr = spec.kind == 'm' ? [0, 0] : getNTrimLR(size);
 			var neff = size - trimlr[0] - trimlr[1];
 			var rbt = this.treesAvg[j] || sbtree.tree(this.timeSort);
 			var toRemove = this.timeAt(this.timesLen - size);
@@ -258,21 +347,20 @@ var TimeStat = execMain(function() {
 		var wpa = [];
 		var toRemove;
 		for (var j = 0; j < this.avgSizes.length; j++) {
-			var size = Math.abs(this.avgSizes[j]);
-			if (this.timesLen < size - 1) {
+			var spec = this.avgSizes[j];
+			var size = spec.size;
+			if (spec.session || this.timesLen < size - 1) {
 				continue;
 			}
-			var trimlr = this.avgSizes[j] < 0 ? [0, 0] : getNTrimLR(size);
-			var neff = size - trimlr[0] - trimlr[1];
 			var rbt = this.treesAvg[j] || sbtree.tree(this.timeSort);
 			if (this.timesLen != size - 1) {
 				toRemove = this.timeAt(this.timesLen - size);
 				rbt.remove(toRemove);
 			}
 			rbt.insert(0, 0);
-			bpa[j] = (rbt.rankOf(-1) < size - trimlr[1]) ? -1 : rbt.avgstd(trimlr[0], size - trimlr[1])[0];
+			bpa[j] = statOfTree(rbt, spec, size)[0];
 			rbt.remove(0).insert(-1, 0);
-			wpa[j] = (rbt.rankOf(-1) < size - trimlr[1]) ? -1 : rbt.avgstd(trimlr[0], size - trimlr[1])[0];
+			wpa[j] = statOfTree(rbt, spec, size)[0];
 			rbt.remove(-1);
 			if (this.timesLen != size - 1) {
 				rbt.insert(toRemove, this.timesLen - size);
@@ -307,12 +395,12 @@ var TimeStat = execMain(function() {
 	}
 
 	//ret length: length - nsolves + 1
-	TimeStat.prototype.runAvgMean = function(start, length, size, trim) {
-		size = size || length;
+	TimeStat.prototype.runStat = function(start, length, spec) {
+		var size = spec.size || length;
 		if (start < 0 || start + length > this.timesLen) {
 			return;
 		}
-		var trimlr = trim == 0 ? [0, 0] : getNTrimLR(size);
+		var trimlr = spec.kind == 'a' ? getNTrimLR(size) : [0, 0];
 		if (size - trimlr[0] - trimlr[1] <= 0) {
 			return [-1, 0, -1, -1];
 		}
@@ -320,17 +408,18 @@ var TimeStat = execMain(function() {
 		for (var j = 0; j < size; j++) {
 			rbt.insert(this.timeAt(start + j), j);
 		}
-		var avgstd = rbt.avgstd(trimlr[0], size - trimlr[1]);
-		var ret = [
-			[(rbt.rankOf(-1) < size - trimlr[1]) ? -1 : avgstd[0], avgstd[1] / 1000, rbt.rank(trimlr[0] - 1), rbt.rank(size - trimlr[1])]
-		];
+		var ret = [statOfTree(rbt, spec, size)];
 		var start0 = start - size;
 		for (var i = size; i < length; i++) {
 			rbt.remove(this.timeAt(start0 + i)).insert(this.timeAt(start + i), j);
-			avgstd = rbt.avgstd(trimlr[0], size - trimlr[1]);
-			ret.push([(rbt.rankOf(-1) < size - trimlr[1]) ? -1 : avgstd[0], avgstd[1] / 1000, rbt.rank(trimlr[0] - 1), rbt.rank(size - trimlr[1])]);
+			ret.push(statOfTree(rbt, spec, size));
 		}
 		return ret;
+	}
+
+	// legacy entry point: trim === 0 means a plain mean, anything else a trimmed average
+	TimeStat.prototype.runAvgMean = function(start, length, size, trim) {
+		return this.runStat(start, length, { kind: trim == 0 ? 'm' : 'a', size: size || length });
 	}
 
 	TimeStat.prototype.getTrimList = function(start, nsolves, thresL, thresR) {

@@ -88,14 +88,23 @@ var crossSessionStats = execMain(function(kpretty, round, kpround) {
 		var tableHead = '<table class="table"><tr><td></td><td>' + hlstr[1] + '</td><td>' + hlstr[0] + '</td></tr>';
 		var avgSizes = hugeStats.avgSizes;
 		for (var j = 0; j < avgSizes.length; j++) {
-			var size = Math.abs(avgSizes[j]);
-			if (hugeStats.timesLen >= size) {
+			var spec = avgSizes[j];
+			if (spec.session) {
+				if (hugeStats.timesLen != 0) {
+					hasTable || (hasTable = true, s.push(tableHead));
+					s.push('<tr><td>' + TimeStat.specName(spec));
+					s.push('<td><span class="click" data="ps' + j + '">' + kpretty(hugeStats.sessionStat(spec)) + '</span></td>');
+					s.push('<td>-</td></tr>');
+				}
+				continue;
+			}
+			if (hugeStats.timesLen >= spec.size) {
 				hasTable || (hasTable = true, s.push(tableHead));
-				s.push('<tr><td>' + hlstr[7 - (avgSizes[j] >>> 31)].replace("%mk", size));
-				s.push('<td><span class="click" data="c' + 'am' [avgSizes[j] >>> 31] + j + '">' + kpround(hugeStats.lastAvg[j][0]) + " (σ=" + stats.trim(hugeStats.lastAvg[j][1], 2) +
-					')</span></td>');
-				s.push('<td><span class="click" data="b' + 'am' [avgSizes[j] >>> 31] + j + '">' + kpround(hugeStats.bestAvg(j, 0)) + " (σ=" + stats.trim(hugeStats.bestAvg(j, 1), 2) +
-					')</span></td></tr>');
+				s.push('<tr><td>' + (spec.kind == 'p' ? TimeStat.specName(spec) : hlstr[spec.kind == 'm' ? 6 : 7].replace("%mk", spec.size)));
+				s.push('<td><span class="click" data="c' + spec.kind + j + '">' + kpround(hugeStats.lastAvg[j][0]) +
+					(spec.kind == 'p' ? '' : " (σ=" + stats.trim(hugeStats.lastAvg[j][1], 2) + ")") + '</span></td>');
+				s.push('<td><span class="click" data="b' + spec.kind + j + '">' + kpround(hugeStats.bestAvg(j, 0)) +
+					(spec.kind == 'p' ? '' : " (σ=" + stats.trim(hugeStats.bestAvg(j, 1), 2) + ")") + '</span></td></tr>');
 			}
 		}
 		hasTable && s.push('</table>');

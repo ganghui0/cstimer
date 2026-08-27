@@ -21,8 +21,8 @@ var trend = execMain(function(kpretty) {
 			return;
 		}
 		var param = stats.getStat12();
-		var stat1 = param[0];
-		var stat2 = param[1];
+		var spec1 = param[0];
+		var spec2 = param[1];
 		var len1 = param[2];
 		var len2 = param[3];
 		ctx = canvas[0].getContext('2d');
@@ -65,7 +65,7 @@ var trend = execMain(function(kpretty) {
 		}
 		if (timesLen > len1) {
 			x = []; y = [];
-			var ao5 = times_stats_list.runAvgMean(0, timesLen, len1, stat1 > 0 ? undefined : 0);
+			var ao5 = times_stats_list.runStat(0, timesLen, spec1);
 			for (var i = 0; i < ao5.length; i++) {
 				if (ao5[i][0] != -1) {
 					x.push((i + len1 - 1) / (timesLen - 1));
@@ -76,7 +76,7 @@ var trend = execMain(function(kpretty) {
 		}
 		if (timesLen > len2) {
 			x = []; y = [];
-			var ao12 = times_stats_list.runAvgMean(0, timesLen, len2, stat2 > 0 ? undefined : 0);
+			var ao12 = times_stats_list.runStat(0, timesLen, spec2);
 			for (var i = 0; i < ao12.length; i++) {
 				if (ao12[i][0] != -1) {
 					x.push((i + len2 - 1) / (timesLen - 1));
@@ -94,9 +94,9 @@ var trend = execMain(function(kpretty) {
 		ctx.fillStyle = kernel.getProp('col-font');
 		ctx.fillText("time", 50, 13);
 		ctx.strokeStyle = '#888'; ctx.beginPath(); ctx.moveTo(90, 7); ctx.lineTo(130, 7); ctx.stroke();
-		ctx.fillText((stat1 > 0 ? "ao" : "mo") + len1, 160, 13);
+		ctx.fillText(TimeStat.specName(spec1), 160, 13);
 		ctx.strokeStyle = '#f00'; ctx.beginPath(); ctx.moveTo(200, 7); ctx.lineTo(240, 7); ctx.stroke();
-		ctx.fillText((stat2 > 0 ? "ao" : "mo") + len2, 270, 13);
+		ctx.fillText(TimeStat.specName(spec2), 270, 13);
 		ctx.strokeStyle = '#00f'; ctx.beginPath(); ctx.moveTo(310, 7); ctx.lineTo(350, 7); ctx.stroke();
 
 		ctx.fillStyle = kernel.getProp('col-font');
