@@ -184,6 +184,7 @@ var scrdata = [
 		['Megaminx', "mgmp", -70],
 		['Pyraminx', "pyrso", -10],
 		['Skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['kr1', "sqrs", 0],
 		['4x4 gözü kapalı', "444bld", -40],
 		['5x5 gözü kapalı', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['yüz dönüş metriği', "sq1h", 40],
 		['büküm metriği', "sq1t", 20]
 	]],
+	['FTO (Yüz-Döndüren-Octahedron)', [
+		['Rastgele Durum', "ftoso", 0],
+		['Rastgele hamle', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond Rastgele Durum', "dmdso", 0]
+	]],
 	['===DİĞER===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap Stili', "ufo", 25]
-	]],
-	['FTO (Yüz-Döndüren-Octahedron)', [
-		['Rastgele Durum', "ftoso", 0],
-		['Rastgele hamle', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond Rastgele Durum', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate Rastgele hamle', "ctico", 60]

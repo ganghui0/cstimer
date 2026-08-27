@@ -184,6 +184,7 @@ var scrdata = [
 		['megaminx', "mgmp", -70],
 		['pyraminx', "pyrso", -10],
 		['skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['sq1', "sqrs", 0],
 		['4x4 BLD', "444bld", -40],
 		['5x5 BLD', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['oldal fordítási rendszer', "sq1h", 40],
 		['tekerési rendszer', "sq1t", 20]
 	]],
+	['FTO (Oldalain forduló oktaéder)', [
+		['véletlen állapot', "ftoso", 0],
+		['véletlen mozdulat', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond véletlen állapot', "dmdso", 0]
+	]],
 	['===EGYÉB===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap stílus', "ufo", 25]
-	]],
-	['FTO (Oldalain forduló oktaéder)', [
-		['véletlen állapot', "ftoso", 0],
-		['véletlen mozdulat', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond véletlen állapot', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate véletlen mozdulat', "ctico", 60]

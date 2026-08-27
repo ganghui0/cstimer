@@ -3,7 +3,7 @@ var CANCEL_LANG = '취소';
 var RESET_LANG = '초기화';
 var ABOUT_LANG = '정보';
 var ZOOM_LANG = '확대/축소';
-var COPY_LANG = 'Copy';
+var COPY_LANG = '복사하기';
 var BUTTON_TIME_LIST = '시간<br>목록';
 var BUTTON_OPTIONS = '설정';
 var BUTTON_EXPORT = '내보내기';
@@ -184,6 +184,7 @@ var scrdata = [
 		['메가밍크스', "mgmp", -70],
 		['피라밍크스', "pyrso", -10],
 		['스큐브', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['스퀘어-1', "sqrs", 0],
 		['4x4 눈가리기', "444bld", -40],
 		['5x5 눈가리기', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['면회전 계량', "sq1h", 40],
 		['연회전 계량', "sq1t", 20]
 	]],
+	['FTO (면 회전식 옥타헤드런)', [
+		['무작위 상태', "ftoso", 0],
+		['무작위 수순', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond 무작위 상태', "dmdso", 0]
+	]],
 	['===기타===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['얍(Jaap)', "ufo", 25]
-	]],
-	['FTO (면 회전식 옥타헤드런)', [
-		['무작위 상태', "ftoso", 0],
-		['무작위 수순', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond 무작위 상태', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate 무작위 수순', "ctico", 60]

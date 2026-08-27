@@ -1,18 +1,18 @@
-<h1>csTimer version <?php echo $version;?> - Professional Speedcubing/Training Timer</h1>
+<h1>csTimer version <?php echo $version;?> - স্পিডকিউবিং/ট্রেনিং এর জন্য সেরা টাইমার সফটওয়্যার</h1>
 <?php include('lang.php') ?>
-<h2>Introduction</h2>
-<p>csTimer is a professional timing program designed for Rubik's cube speedsolvers, it provides:</p>
+<h2>ভূমিকা</h2>
+<p>csTimer হলো রুবিক্স কিউব স্পিডসলভারদের জন্য তৈরি একটি উন্নত মানের টাইমিং প্রোগ্রাম। এতে আছেঃ</p>
 <ul>
-<li>Amounts of scramble algorithms, including <strong>all WCA official events</strong>, varieties of twisty puzzles, <strong>training scramble</strong> for specific sub steps (e.g. <strong>F2L, OLL, PLL, ZBLL</strong>, and can filter cases), etc</li>
-<li>Plenty of statistics functions, it supports <strong>time-split timing</strong>; <strong>Any number of sessions</strong>, session split/merge, etc.</li>
-<li>Varieties of solver, such as <strong>Cross, Xcross, 2x2x2 face, Skewb Face, SQ1 shape</strong>, for learning or training these sub steps.</li>
-<li>Other auxiliary tools, such as scramble image, 8-second inspection (voice) alert, metronome, batch-scramble generator, etc.</li>
-<li>Backup function, For avoiding data missing, you can backup your solves to local files, csTimer's server or Google storage.</li>
+<li>বিভিন্ন ধরনের scramble করার প্রোগ্রাম, যার মধ্যে রয়েছে <strong>সব WCA official events</strong> এবং বিভিন্ন ধরনের twisty puzzle, সলভিং এর নির্দিষ্ট কোনো ধাপ প্র্যাকটিস করার জন্য scramble (যেমন F2L, OLL, PLL, ZBLL), নির্দিষ্ট case ফিল্টার করা, ইত্যাদি</li>
+<li>অনেক ধরনের statistics ফিচার — যেমন একই সল্ভ <strong>tকয়েক ধাপে timing</strong> করা, যত খুশি session তৈরি, session split বা merge করা ইত্যাদি।</li>
+<li>বিভিন্ন ধরনের solver, যেমন <strong>Cross, Xcross, 2x2x2 face, Skewb Face, SQ1 shape </strong>— যা দিয়ে এই ধাপসমুহ শেখা বা ট্রেইনিং করা যায়।</li>
+<li>আরও কিছু সহায়ক টুল আছে, যেমন scramble ছবি, ৮ সেকেন্ড inspection ভয়েস অ্যালার্ট , মেট্রোনোম, একসাথে অনেক scramble তৈরি ইত্যাদি।</li>
+<li>যাতে ডাটা হারিয়ে না যায় সেজন্য ব্যাকআপ রাখার সুবিধা আছে; লোকাল ফাইল, csTimer সার্ভার, বা গুগল স্টোরেজ এ ব্যাকআপ রাখা যায়।</li>
 </ul>
-<p>csTimer supports most of modern desktop browsers, on mobile phone and tablet PC, you can add csTimer to your home screen, and it will work as a native APP.</p>
-<p>csTimer takes advantage of browser cache, which consumes traffic only when you open it for the first time, after that, csTimer is able to work without network connection (except for functions like backup)</p>
-<h3>Copyright</h3>
-<p>csTimer is an open source software that follows the GPLv3. If you have any suggestions or comments on csTimer, please submit it <a class="click" href="https://github.com/cs0x7f/cstimer/issues" title="">here</a></p>
+<p>csTimer প্রায় সকল কম্পিউটার ব্রাউজার, ফোন ও ট্যাবলেটেই সাপোর্ট করে। "Add to your home screen" অপশনের মাধ্যমে Native app হিসেবেও ব্যবহার করা যায়।</p>
+<p>csTimer browser cache ব্যবহার করে। তাই প্রথমবার খোলার সময়ই শুধু ইন্টারনেট ডাটা লাগে। এরপর সাধারণত ইন্টারনেট ছাড়াই ব্যবহার করা যায় (backup-এর মতো কিছু ফিচার বাদে)।</p>
+<h3>কপিরাইট</h3>
+<p>csTimer একটি ওপেন সোর্স সফটওয়্যার যা GPLv3 লাইসেন্স এর আওতাভুক্ত। csTimer সম্পর্কে কোনো পরামর্শ বা মন্তব্য থাকলে <a class="click" href="https://github.com/cs0x7f/cstimer/issues" title="">এখানে</a> সাবমিট করুন।</p>
 <p>Written by: <a href="mailto:cs0x7f@gmail.com">Shuang Chen (cs0x7f@gmail.com)</a></p>
 <p>UI designed by: <a href="mailto:liebe7@126.com">Yue Zhang (liebe7@126.com)</a></p>
 <h2>Basic functions</h2>

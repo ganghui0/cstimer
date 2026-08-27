@@ -184,6 +184,7 @@ var scrdata = [
 		['五魔方', "mgmp", -70],
 		['金字塔', "pyrso", -10],
 		['斜转魔方', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['Square-1', "sqrs", 0],
 		['四阶盲拧', "444bld", -40],
 		['五阶盲拧', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['ftm', "sq1h", 40],
 		['ttm', "sq1t", 20]
 	]],
+	['FTO (Face-Turning Octahedron)', [
+		['随机状态', "ftoso", 0],
+		['随机转动', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond 随机状态', "dmdso", 0]
+	]],
 	['===其他===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Jaap style', "ufo", 25]
-	]],
-	['FTO (Face-Turning Octahedron)', [
-		['随机状态', "ftoso", 0],
-		['随机转动', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond 随机状态', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate 随机转动', "ctico", 60]

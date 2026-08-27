@@ -184,6 +184,7 @@ var scrdata = [
 		['megaminx', "mgmp", -70],
 		['pyraminx', "pyrso", -10],
 		['skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['sq1', "sqrs", 0],
 		['4x4 bld', "444bld", -40],
 		['5x5 bld', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['métrique face à face', "sq1h", 40],
 		['torsion métrique', "sq1t", 20]
 	]],
+	['FTO (Face-Turning Octahedron)', [
+		['état aléatoire', "ftoso", 0],
+		['mouvements aléatoires', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond état aléatoire', "dmdso", 0]
+	]],
 	['===AUTRE===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Style Jaap', "ufo", 25]
-	]],
-	['FTO (Face-Turning Octahedron)', [
-		['état aléatoire', "ftoso", 0],
-		['mouvements aléatoires', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond état aléatoire', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate mouvements aléatoires', "ctico", 60]
@@ -607,7 +608,7 @@ var VRCREPLAY_SHARE = 'partager le lien';
 var GIIKER_CONNECT = 'Cliquer pour se connecter';
 var GIIKER_RESET = 'Réinitialiser (Marquer comme résolu)';
 var GIIKER_REQMACMSG = 'Please enter the MAC address of your smart hardware (xx:xx:xx:xx:xx:xx). You can find the MAC address through chrome://bluetooth-internals/#devices, or modify following options to let csTimer automatically obtain it:\nChrome: Turn on chrome://flags/#enable-experimental-web-platform-features\nBluefy: Turn on Enable BLE Advertisements';
-var GIIKER_NOBLEMSG = 'L\'API Bluetooth n\'est pas disponible. Assurez-vous d\'accéder au site à l\'aide du protocole HTTPS, que le Bluetooth est activé sur votre appareil et essayez avec l\'option chrome://flags/#enable-experimental-web-platform-features d\'activée sur Chrome.';
+var GIIKER_NOBLEMSG = 'L\'API Bluetooth n\'est pas disponible. Assurez-vous d\'accéder au site à l\'aide du protocole HTTPS, que votre appareil ait le Bluetooth d\'activé et essayez avec l\'option chrome://flags/#enable-experimental-web-platform-features d\'activée sur Chrome.';
 var PROPERTY_SHOWAD = 'Afficher les publicités (prend effet après rechargement)';
 var PROPERTY_GIIORI = 'Orientation du cube';
 var LGHINT_INVALID = 'Valeur invalide !';

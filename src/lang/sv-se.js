@@ -3,15 +3,15 @@ var CANCEL_LANG = 'Avbryt';
 var RESET_LANG = 'Återställ';
 var ABOUT_LANG = 'Om';
 var ZOOM_LANG = 'Zooma';
-var COPY_LANG = 'Copy';
+var COPY_LANG = 'Kopiera';
 var BUTTON_TIME_LIST = 'LISTA<br>TIDER';
 var BUTTON_OPTIONS = 'ALTERNATIV';
 var BUTTON_EXPORT = 'EXPORTERA';
 var BUTTON_DONATE = 'DONERA';
 var PROPERTY_SR = 'Med session';
 var PROPERTY_USEINS = 'använd WCA inspektion';
-var PROPERTY_USEINS_STR = 'Always (down)|Always (up)|Except BLD (down)|Except BLD (up)|Never';
-var PROPERTY_SHOWINS = 'Show an icon when inspection is enabled';
+var PROPERTY_USEINS_STR = 'Alltid(ned)|Alltid(upp)|Förutom BLD(ned)|Förutom BLD(upp)|Aldrig';
+var PROPERTY_SHOWINS = 'Visa en ikon när inspektion är aktiverat';
 var PROPERTY_VOICEINS = 'röstvarning av WCA inspekton';
 var PROPERTY_VOICEINS_STR = 'ingen|manlig röst|kvinnlig röst';
 var PROPERTY_VOICEVOL = 'Röstvolym';
@@ -24,12 +24,12 @@ var PROPERTY_SCRMONO = 'Fastbredd blandning';
 var PROPERTY_SCRLIM = 'Begränsa höjden av blandningsområdet';
 var PROPERTY_SCRALIGN = 'Anpassning av blandningsområdet';
 var PROPERTY_SCRALIGN_STR = 'Mitten|Vänster|Höger';
-var PROPERTY_SCRWRAP = 'Scramble Wrap';
-var PROPERTY_SCRWRAP_STR = 'Balanced|Normal';
-var PROPERTY_SCRNEUT = 'Color neutral';
-var PROPERTY_SCRNEUT_STR = 'None|Single face|Double faces|Six faces';
-var PROPERTY_SCREQPR = 'Probabilities for training-scramble states';
-var PROPERTY_SCREQPR_STR = 'Actual|Equal|Random order';
+var PROPERTY_SCRWRAP = 'Blandningswrap';
+var PROPERTY_SCRWRAP_STR = 'Balanserad|Normal';
+var PROPERTY_SCRNEUT = 'Färg neutral';
+var PROPERTY_SCRNEUT_STR = 'Inga|En sida|Två sidor|Sex sidor';
+var PROPERTY_SCREQPR = 'Sannolikheter för tillstånd för träningsblandningar';
+var PROPERTY_SCREQPR_STR = 'Faktisk|Lika|Slumpmässig ordning';
 var PROPERTY_SCRFAST = 'Använd snabb blandning för 4x4x4 (ej officiell)';
 var PROPERTY_SCRKEYM = 'Markeringsnyckeln flyttas i blandning';
 var PROPERTY_SCRCLK = 'Händelse vid tryckning på blanda';
@@ -57,8 +57,8 @@ var EXPORT_LOGINWCA = 'Logga in med WCA-konto';
 var EXPORT_LOGOUTCFM = 'Bekräfta att logga ut?';
 var EXPORT_LOGINAUTHED = 'Godkänd<br>hämtar data...';
 var EXPORT_AEXPALERT = 'More than %d solves since last backup';
-var EXPORT_WHICH = 'You have %d file(s), which one should be imported?';
-var EXPORT_WHICH_ITEM = '%s solve(s), uploaded at %t';
+var EXPORT_WHICH = 'Du har %d fil(er), vilken bör importeras?';
+var EXPORT_WHICH_ITEM = '%s lösning(ar), uppladdade vid %t';
 var IMPORT_FINAL_CONFIRM = 'Detta kommer att överskrida all lokal data! Det kommer att ändra %d sessioner,  lägga till %a och ta bort %r lösningar åtminstone. Bekräfta att importera data?';
 var BUTTON_SCRAMBLE = 'BLAN<br>NING';
 var BUTTON_TOOLS = 'VERKTYG';
@@ -75,11 +75,11 @@ var TOOLS_HUGESTATS = 'kors-session statistik';
 var TOOLS_DISTRIBUTION = 'Tidsfördelning';
 var TOOLS_TREND = 'Tidsutveckling';
 var TOOLS_METRONOME = 'Metronom';
-var TOOLS_RECONS = 'Reconstruct';
+var TOOLS_RECONS = 'Återskapa';
 var TOOLS_RECONS_NODATA = 'No solution found.';
 var TOOLS_RECONS_TITLE = 'insp|exec|turn|tps';
-var TOOLS_TRAINSTAT = 'Training Stat.';
-var TOOLS_BLDHELPER = 'BLD Helper';
+var TOOLS_TRAINSTAT = 'Träningsstatistik';
+var TOOLS_BLDHELPER = 'BLD hjälpare';
 var TOOLS_CFMTIME = 'Bekräfta tid';
 var TOOLS_SOLVERS = 'Lösare';
 var TOOLS_DLYSTAT = 'Daily Statistics';
@@ -114,7 +114,7 @@ var OLCOMP_WCAACCOUNT = 'WCA Konto';
 var OLCOMP_ABORT = 'Avbryt tävlingen och visa resultat?';
 var OLCOMP_WITHANONYM = 'Med Anonym';
 var PROPERTY_IMGSIZE = 'Blandningsbildstorlek';
-var PROPERTY_IMGREP = 'Show virtual cube animation when clicking scramble image';
+var PROPERTY_IMGREP = 'Visa virtuell kub animation när blandningsbild klickas';
 var TIMER_INSPECT = 'Inspektera';
 var TIMER_SOLVE = 'Lös';
 var PROPERTY_USEMOUSE = 'Använd mustimer';
@@ -122,7 +122,7 @@ var PROPERTY_TIMEU = 'Timeruppdateringen är';
 var PROPERTY_TIMEU_STR = 'uppdatera|0.1s|sekunder|inspektion|ingen';
 var PROPERTY_PRETIME = 'Tid för att hålla mellanslagstangenten nere(sekund(er))';
 var PROPERTY_ENTERING = 'Ange tider med';
-var PROPERTY_ENTERING_STR = 'timer|mata in|stackmat|MoYu timer|virtuell|Bluetooth Cube|qCube|Bluetooth Timer|last layer training';
+var PROPERTY_ENTERING_STR = 'timer|mata in|stackmat|MoYu timer|virtuell|Bluetooth Cube|qCube|Bluetooth Timer|sista lager träning';
 var PROPERTY_INTUNIT = 'Enhet vid inmatning av heltal';
 var PROPERTY_INTUNIT_STR = 'sekund|centisekund|millisekund';
 var PROPERTY_COLOR = 'Välj färgtema';
@@ -140,18 +140,18 @@ var PROPERTY_FONT = 'Timerns teckensnitt';
 var PROPERTY_FONT_STR = 'slumpmässig digital|normal|digital1|digital2|digital3|digital4|digital5';
 var PROPERTY_FORMAT = 'Tidsformat';
 var PROPERTY_USEKSC = 'använd tangentborsgenväg';
-var PROPERTY_USEGES = 'use gesture control';
+var PROPERTY_USEGES = 'Använd gestkontroll';
 var PROPERTY_NTOOLS = 'Antal verktyg';
 var PROPERTY_AHIDE = 'Göm allt när timern tar tid';
 var SCRAMBLE_LAST = 'senaste';
 var SCRAMBLE_NEXT = 'nästa';
 var SCRAMBLE_SCRAMBLE = ' blandning';
-var SCRAMBLE_SCRAMBLING = 'Scrambling';
+var SCRAMBLE_SCRAMBLING = 'Blandning';
 var SCRAMBLE_LENGTH = 'längd';
 var SCRAMBLE_INPUT = 'Mata in Blandning(ar)';
-var SCRAMBLE_INPUTTYPE = 'Scramble type';
+var SCRAMBLE_INPUTTYPE = 'Blandningstyp';
 var PROPERTY_VRCSPEED = 'VRC bashastighet (tps)';
-var PROPERTY_VRCORI = 'Virtual cube orientation';
+var PROPERTY_VRCORI = 'Virtuell kub orientering';
 var PROPERTY_VRCMP = 'Flera faser';
 var PROPERTY_VRCMPS = 'Ingen|CFOP|CF+OP|CFFFFOP|CFFFFOOPP|Roux';
 var PROPERTY_GIIKERVRC = 'Visa virtuell Giiker cube';
@@ -184,6 +184,7 @@ var scrdata = [
 		['megaminx', "mgmp", -70],
 		['Pyraminx', "pyrso", -10],
 		['Skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['sq1', "sqrs", 0],
 		['4x4 bld', "444bld", -40],
 		['5x5 bld', "555bld", -60],
@@ -204,10 +205,10 @@ var scrdata = [
 		['3x3x3 för nybörjare', "333noob", 25],
 		['endast kanter', "edges", 0],
 		['endast hörn', "corners", 0],
-		['BLD Helper', "nocache_333bldspec", 0],
+		['BLD hjälpare', "nocache_333bldspec", 0],
 		['Pattern Tool', "nocache_333patspec", 0],
 		['3x3 ft', "333ft", 0],
-		['Custom', "333custom", 0]
+		['Anpassat', "333custom", 0]
 	]],
 	['3x3x3 CFOP', [
 		['PLL', "pll", 0],
@@ -228,7 +229,7 @@ var scrdata = [
 		['EOLine', "eoline", 0],
 		['EO Cross', "eocross", 0],
 		['enkelt kors', "easyc", 3],
-		['easy xcross', "easyxc", 4]
+		['Lätt xkors', "easyxc", 4]
 	]],
 	['3x3x3 Roux', [
 		['2nd Block', "sbrx", 0],
@@ -341,6 +342,17 @@ var scrdata = [
 		['face turn metric', "sq1h", 40],
 		['twist metric', "sq1t", 20]
 	]],
+	['FTO (Face-Turning Octahedron)', [
+		['Slumpmässigt tillstånd', "ftoso", 0],
+		['Slumpmässigt drag', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond Slumpmässigt tillstånd', "dmdso", 0]
+	]],
 	['===Annat===', [
 		['--', "blank", 0]
 	]],
@@ -434,17 +446,6 @@ var scrdata = [
 	['UFO', [
 		['Jaap stil', "ufo", 25]
 	]],
-	['FTO (Face-Turning Octahedron)', [
-		['Slumpmässigt tillstånd', "ftoso", 0],
-		['Slumpmässigt drag', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond Slumpmässigt tillstånd', "dmdso", 0]
-	]],
 	['Icosahedron', [
 		['Icosamate Slumpmässigt drag', "ctico", 60]
 	]],
@@ -523,7 +524,7 @@ var STATS_EXPORTCSV = 'Exportera CSV';
 var STATS_SSMGR_TITLE = 'Sessionshanterare';
 var STATS_SSMGR_NAME = 'Namn';
 var STATS_SSMGR_DETAIL = 'Sessionsdetaljer';
-var STATS_SSMGR_OPS = 'Döpa|Skapa|Dela|Sammanfoga|Radera|Sort|Merge&Dedupe';
+var STATS_SSMGR_OPS = 'Döp|Skapa|Dela|Sammanfoga|Radera|Sortera|Sammanfoga&Deduplicera';
 var STATS_SSMGR_ORDER = 'Sortera efter blandning';
 var STATS_SSMGR_ODCFM = 'Sortera alla sessioner efter blandning?';
 var STATS_SSMGR_SORTCFM = '%d Lösning(ar) kommer att bli omårdnad(e)';
@@ -531,7 +532,7 @@ var STATS_ALERTMG = 'Sammanfoga alla tider i sessionen [%f] till slutet av sessi
 var STATS_PROMPTSPL = 'Antal senaste tider delade från sessionen [%s]?';
 var STATS_ALERTSPL = 'Bör delas eller lämnas 1 gång';
 var STATS_AVG = 'mean';
-var STATS_SUM = 'sum';
+var STATS_SUM = 'Summa';
 var STATS_SOLVE = 'lösning';
 var STATS_TIME = 'tid';
 var STATS_SESSION = 'Session';
@@ -549,7 +550,7 @@ var STATS_XSESSION_SCR = 'någon blandning';
 var STATS_XSESSION_CALC = 'Kalkyl';
 var STATS_RSFORSS = 'Visa statistik. när du klickar lös nummer';
 var PROPERTY_PRINTSCR = 'Visa blandning(ar) i statistik';
-var PROPERTY_PRINTCOMM = 'print comment(s) in statistics';
+var PROPERTY_PRINTCOMM = 'Skriv ut kommentar(er) i statistik';
 var PROPERTY_PRINTDATE = 'Visa lösningens datum i statistik';
 var PROPERTY_SUMMARY = 'Visa sammanfattning före tidslistan';
 var PROPERTY_IMRENAME = 'Namnge session omedelbart efter skapande';
@@ -557,14 +558,14 @@ var PROPERTY_SCR2SS = 'Skapa ny session vid växling av blandningstyp';
 var PROPERTY_SS2SCR = 'Återställ blandningstyp vid byte av session';
 var PROPERTY_SS2PHASES = 'Återställ flerfastidtagning vid växling av session';
 var PROPERTY_STATINV = 'Omvänd tidslista';
-var PROPERTY_STATSSUM = 'Show sum in time list';
-var PROPERTY_STATTHRES = 'Show target time for session best';
-var PROPERTY_STATBPA = 'Show best possible average (BPA)';
-var PROPERTY_STATWPA = 'Show worst possible average (WPA)';
+var PROPERTY_STATSSUM = 'Visa summa i tidslista';
+var PROPERTY_STATTHRES = 'Visa måltid för sessionsbästa';
+var PROPERTY_STATBPA = 'Visa bästa möjliga snitt (BPA)';
+var PROPERTY_STATWPA = 'Visa sämsta möjliga snitt (WPA)';
 var PROPERTY_STATAL = 'Statistiska indikatorer';
 var PROPERTY_STATALU = 'Anpassad statistiskindikator';
-var PROPERTY_HLPBS = 'Highlight PBs';
-var PROPERTY_HLPBS_STR = 'Dark orange as WCA|As link color|Bolder|None';
+var PROPERTY_HLPBS = 'Understryk PB';
+var PROPERTY_HLPBS_STR = 'Mörkorange som WCA|Som länkfärg|Fetstil|Inget';
 var PROPERTY_DELMUL = 'Aktivera flera borttagningar';
 var PROPERTY_TOOLSFUNC = 'Valda Funktioner';
 var PROPERTY_TRIM = 'Antal lösningar trimmade på varje sida';
@@ -594,8 +595,8 @@ var BGIMAGE_OPACITY = 'Bakgrundsbildens opacitet';
 var BGIMAGE_IMAGE = 'Bakgrundsbild';
 var BGIMAGE_IMAGE_STR = 'Ingen|Manuell|CCT';
 var SHOW_AVG_LABEL = 'Visa average markering';
-var SHOW_DIFF_LABEL = 'Show Difference Label';
-var SHOW_DIFF_LABEL_STR = '-Green+Red|-Red+Green|Normal|None';
+var SHOW_DIFF_LABEL = 'Vissa skillnad';
+var SHOW_DIFF_LABEL_STR = '-Grön+Röd|-Röd+Grön|Normal|Inget';
 var USE_LOGOHINT = 'Tipsmeddelanden i logotypen';
 var TOOLS_SCRGEN = 'Blandningsgenerator';
 var SCRGEN_NSCR = 'Antal blandningar';

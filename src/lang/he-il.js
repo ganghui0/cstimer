@@ -184,6 +184,7 @@ var scrdata = [
 		['מגמינקס', "mgmp", -70],
 		['פיראמינקס', "pyrso", -10],
 		['סקיוב', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['סקוואן', "sqrs", 0],
 		['4×4 בליינד', "444bld", -40],
 		['5×5 בליינד', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['מטריקת סיבוב פאה', "sq1h", 40],
 		['מטריקת סיבוב', "sq1t", 20]
 	]],
+	['אוקטהדרון פאות', [
+		['random state', "ftoso", 0],
+		['random move', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond random state', "dmdso", 0]
+	]],
 	['===אחר===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['עב"מ', [
 		['Jaap style', "ufo", 25]
-	]],
-	['אוקטהדרון פאות', [
-		['random state', "ftoso", 0],
-		['random move', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond random state', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate random move', "ctico", 60]

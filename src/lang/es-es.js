@@ -184,6 +184,7 @@ var scrdata = [
 		['Megaminx', "mgmp", -70],
 		['Pyraminx', "pyrso", -10],
 		['Skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['Sq-1', "sqrs", 0],
 		['4x4 BLD', "444bld", -40],
 		['5x5 BLD', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['cara vuelta métrica', "sq1h", 40],
 		['giro métrico', "sq1t", 20]
 	]],
+	['FTO (Octaedro de giro por caras)', [
+		['estado aleatorio', "ftoso", 0],
+		['movimiento aleatorio', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond estado aleatorio', "dmdso", 0]
+	]],
 	['===OTROS===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Estilo Jaap', "ufo", 25]
-	]],
-	['FTO (Octaedro de giro por caras)', [
-		['estado aleatorio', "ftoso", 0],
-		['movimiento aleatorio', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond estado aleatorio', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate movimiento aleatorio', "ctico", 60]

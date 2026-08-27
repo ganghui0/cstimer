@@ -35,7 +35,7 @@
 <tr><th>Alt + haut/bas</th><td>Aller à la session suivante/précédente</td></tr>
 <tr><th>Alt + gauche/droite</th><td>Afficher le mélange précédent /suivant</td></tr>
 <tr><th>Ctrl + 1/2/3</th><td>La dernière résolution est OK/+2/DNF</td></tr>
-<tr><th>Ctrl + Alt + t/i/s/v/g/q/b/l</th><td>Entering in times with timer/typing/stackmat/virtual/bluetooth cube/qcube/bluetooth timer/last layer</td></tr>
+<tr><th>Ctrl + Alt + t/i/s/v/g/q/b/l</th><td>Saisir les temps avec le chronomètre/clavier/stackmat/cube virtuel/cube Bluetooth/qcube/chronomètre Bluetooth/dernière couronne</td></tr>
 </table>
 
 <table class="table" style="display: inline-block;">
@@ -167,20 +167,20 @@
 <h2>Palettes de couleurs</h2>
 <?php include('color.php') ?>
 <div class="donate helptable" style="line-height:1.5em;">
-<h2>Hardware compatible with csTimer</h2>
-<p>In addition to timing by keyboard, csTimer also supports Bluetooth Smart Cubes and Smart Timers.</p>
-<p>If you use a smart cube, csTimer will record the detailed solution of each of your solves and provide more statistics and practice functions (e.g. CFOP automatic segmentation, etc.)</p>
+<h2>Matériel compatible avec csTimer</h2>
+<p>En plus du chronométrage clavier, csTimer prends également en charge les cubes et chronomètres connectés !</p>
+<p>Si vous utilisez un cube intelligent, csTimer enregistrera toutes vos résolutions en détail pour vous fournir diverses statistiques et outils d'entrainement (p. ex. segmentation automatique des résolutions CFOP, etc.)</p>
 <ul>
 <li><a class="click" href="https://www.amazon.com/dp/B0CGDHVJBL?tag=cstimer-20#" title="">Gan 12 ui FreePlay</a></li>
 <li><a class="click" href="https://www.amazon.com/dp/B083TW9WFT?tag=cstimer-20#" title="">Gan Halo Bluetooth Timer</a></li>
 </ul>
-<h2>Recommended products</h2>
-<p>Here are some professional cubes or hardwares.</p>
+<h2>Recommandations de matériel</h2>
+<p>Quelques cubes et chronomètres pour vous.</p>
 <ul>
 <li><a class="click" href="https://www.amazon.com/dp/B0182KR2LO?tag=cstimer-20#" title="">G5 Stackmat</a></li>
 <li><a class="click" href="https://www.amazon.com/dp/B086PNKX2P?tag=cstimer-20#" title="">Gan 356 M</a></li>
 </ul>
-<h2>Donate directly</h2>
+<h2>Faire un don</h2>
 <p>Merci de votre précieux soutien à csTimer !  Votre don nous aidera à couvrir nos coûts de développement et de maintenance.</p>
 <p>Si vous souhaitez nous faire un don via PayPal, veuillez cliquer sur le bouton ci-dessous ou passer par <a class="click" href="https://www.paypal.me/cs0x7f" title="">PayPal.me</a>.</p>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">

@@ -184,6 +184,7 @@ var scrdata = [
 		['megaminx', "mgmp", -70],
 		['pyraminx', "pyrso", -10],
 		['skewb', "skbso", 0],
+		['FTO', "ftoso", 0],
 		['sq1', "sqrs", 0],
 		['4x4 bld', "444bld", -40],
 		['5x5 bld', "555bld", -60],
@@ -341,6 +342,17 @@ var scrdata = [
 		['Giro della faccia metrica', "sq1h", 40],
 		['torsione metrica', "sq1t", 20]
 	]],
+	['FTO (Giro faccia Ottaedro)', [
+		['stato casuale', "ftoso", 0],
+		['mossa casuale', "fto", 30],
+		['L3T', "ftol3t", 0],
+		['L3T+LBT', "ftol4t", 0],
+		['TCP', "ftotcp", 0],
+		['edges only', "ftoedge", 0],
+		['centers only', "ftocent", 0],
+		['corners only', "ftocorn", 0],
+		['Diamond stato casuale', "dmdso", 0]
+	]],
 	['===ALTRO===', [
 		['--', "blank", 0]
 	]],
@@ -433,17 +445,6 @@ var scrdata = [
 	]],
 	['UFO', [
 		['Stile Jaap', "ufo", 25]
-	]],
-	['FTO (Giro faccia Ottaedro)', [
-		['stato casuale', "ftoso", 0],
-		['mossa casuale', "fto", 30],
-		['L3T', "ftol3t", 0],
-		['L3T+LBT', "ftol4t", 0],
-		['TCP', "ftotcp", 0],
-		['edges only', "ftoedge", 0],
-		['centers only', "ftocent", 0],
-		['corners only', "ftocorn", 0],
-		['Diamond stato casuale', "dmdso", 0]
 	]],
 	['Icosahedron', [
 		['Icosamate mossa casuale', "ctico", 60]
