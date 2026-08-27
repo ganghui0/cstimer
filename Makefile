@@ -61,6 +61,7 @@ stats/stats.js \
 stats/stattool.js \
 stats/trend.js \
 stats/distribution.js \
+stats/cumdistribution.js \
 stats/hugestat.js \
 stats/dlystat.js \
 stats/recons.js \
