@@ -73,7 +73,6 @@ var TOOLS_IMAGE = 'draw scramble';
 var TOOLS_STATS = 'Statistics';
 var TOOLS_HUGESTATS = 'cross-session stats';
 var TOOLS_DISTRIBUTION = 'time distribution';
-var TOOLS_DISTRIBUTION_TIP = 'range|count|cumulative|current streak';
 var TOOLS_CUMDISTRIBUTION = 'cumulative time distribution';
 var TOOLS_CUMDIST_TIP = 'time|percentile';
 var TOOLS_TREND = 'time trend';

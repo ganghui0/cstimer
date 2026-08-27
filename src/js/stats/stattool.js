@@ -176,7 +176,9 @@ var stattool = execMain(function(kpretty, round, kpround) {
 				.append($('<th>').text('N'))
 				.append($('<th>').text(STATS_SOLVE))
 				.append($('<th>').text(hlstr[0]))
-				.append($('<th style="padding:0">').append(statSelect))
+				.append($('<th style="padding:0">').append(
+					statSelect.unbind('change').change(update)
+				))
 			);
 
 			if (timesLen == 0) {
@@ -212,7 +214,6 @@ var stattool = execMain(function(kpretty, round, kpround) {
 				return;
 			}
 			editDiv.empty().append(latestLabel, commentInput.unbind('change keydown').change(saveLatestComment).keydown(procInputKey), saveButton.unbind('click').click(saveLatestComment));
-			statSelect.unbind('change').change(update);
 			fdiv.empty().append(div.empty().append(editDiv, table));
 			update();
 		}
