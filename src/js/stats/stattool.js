@@ -177,7 +177,6 @@ var stattool = execMain(function(kpretty, round, kpround) {
 			var headRow = $('<tr>')
 				.append($('<th>').text(STATS_COMMENT))
 				.append($('<th>').text('N'))
-				.append($('<th>').text(STATS_SOLVE))
 				.append($('<th>').text(hlstr[0]));
 
 			table.empty();
@@ -193,7 +192,7 @@ var stattool = execMain(function(kpretty, round, kpround) {
 			}
 
 			if (timesLen == 0) {
-				table.append($('<tr>').append($('<td>').attr('colspan', isRolling ? 6 : 5).text('No solves')));
+				table.append($('<tr>').append($('<td>').attr('colspan', isRolling ? 5 : 4).text('No solves')));
 				return;
 			}
 
@@ -206,11 +205,14 @@ var stattool = execMain(function(kpretty, round, kpround) {
 				var fmt = function(v) {
 					return v == null || v < 0 ? 'N/A' : (isPct ? kpretty : kpround)(v);
 				};
+				// N carries the DNF count only when there is one, so the common
+				// all-solved case stays a single uncluttered number
+				var ndnf = statRet[0];
 				var row = $('<tr>')
 					.append($('<td>').text(group.key || '(blank)'))
-					.append($('<td>').text(group.idxs.length + ' (' + share + ')'))
-					.append($('<td>').text(solved + '/' + group.idxs.length))
-					.append($('<td>').text(solved ? kpretty(statObj.bestTime) : 'DNF'));
+					.append($('<td>').text(group.idxs.length + ' (' + share +
+						(ndnf ? ', ' + ndnf + ' ' + kpretty(-1) : '') + ')'))
+					.append($('<td>').text(solved ? kpretty(statObj.bestTime) : kpretty(-1)));
 				if (isRolling) { // rolling value of the latest window, then the group's record
 					var last = statObj.lastAvg[0];
 					row.append($('<td>').text(solved && last ? fmt(last[0]) : 'N/A'))
