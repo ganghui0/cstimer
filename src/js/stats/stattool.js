@@ -170,19 +170,30 @@ var stattool = execMain(function(kpretty, round, kpround) {
 			var sel = statSelect.val();
 			var spec = sel == 'm' ? null : avgSizes[~~sel.slice(1)];
 			var isPct = spec && spec.kind == 'p';
-
-			table.empty().append($('<tr>')
+			// a windowed indicator has both a rolling value and a record; a whole-session
+			// one (or the plain mean) has only the one number
+			var isRolling = spec && !spec.session;
+			var selectTh = $('<th style="padding:0">').append(statSelect.unbind('change').change(update));
+			var headRow = $('<tr>')
 				.append($('<th>').text(STATS_COMMENT))
 				.append($('<th>').text('N'))
 				.append($('<th>').text(STATS_SOLVE))
-				.append($('<th>').text(hlstr[0]))
-				.append($('<th style="padding:0">').append(
-					statSelect.unbind('change').change(update)
-				))
-			);
+				.append($('<th>').text(hlstr[0]));
+
+			table.empty();
+			if (isRolling) {
+				headRow.children().attr('rowspan', 2);
+				table.append(headRow.append(selectTh.attr('colspan', 2)));
+				table.append($('<tr>')
+					.append($('<th>').text(hlstr[1]))
+					.append($('<th>').text(hlstr[0]))
+				);
+			} else {
+				table.append(headRow.append(selectTh.removeAttr('colspan')));
+			}
 
 			if (timesLen == 0) {
-				table.append($('<tr>').append($('<td colspan="5">').text('No solves')));
+				table.append($('<tr>').append($('<td>').attr('colspan', isRolling ? 6 : 5).text('No solves')));
 				return;
 			}
 
@@ -192,17 +203,22 @@ var stattool = execMain(function(kpretty, round, kpround) {
 				var statRet = statObj.getAllStats();
 				var solved = group.idxs.length - statRet[0];
 				var share = stats.trim(group.idxs.length / timesLen * 100, 1) + '%';
-				// whole-session indicators apply across the group, windowed ones report their best
-				var val = !solved ? null :
-					!spec ? statRet[1] :
-					spec.session ? statObj.sessionStat(spec) : statObj.bestAvg(0, 0);
-				table.append($('<tr>')
+				var fmt = function(v) {
+					return v == null || v < 0 ? 'N/A' : (isPct ? kpretty : kpround)(v);
+				};
+				var row = $('<tr>')
 					.append($('<td>').text(group.key || '(blank)'))
 					.append($('<td>').text(group.idxs.length + ' (' + share + ')'))
 					.append($('<td>').text(solved + '/' + group.idxs.length))
-					.append($('<td>').text(solved ? kpretty(statObj.bestTime) : 'DNF'))
-					.append($('<td>').text(val == null || val < 0 ? 'N/A' : (isPct ? kpretty : kpround)(val)))
-				);
+					.append($('<td>').text(solved ? kpretty(statObj.bestTime) : 'DNF'));
+				if (isRolling) { // rolling value of the latest window, then the group's record
+					var last = statObj.lastAvg[0];
+					row.append($('<td>').text(solved && last ? fmt(last[0]) : 'N/A'))
+						.append($('<td>').text(solved ? fmt(statObj.bestAvg(0, 0)) : 'N/A'));
+				} else {
+					row.append($('<td>').text(fmt(!solved ? null : spec ? statObj.sessionStat(spec) : statRet[1])));
+				}
+				table.append(row);
 			}
 		}
 
