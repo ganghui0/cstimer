@@ -14,6 +14,8 @@ execMain(function () {
 	var writeChrct;
 	var decoder;
 	var deviceMac;
+	var isAdapter = false; // QY-Adapter: stackmat connected through the QiYi bluetooth adapter
+	var lastState;
 
 	function getManufacturerDataBytes(mfData) {
 		if (mfData instanceof DataView) { // this is workaround for Bluefy browser
@@ -160,9 +162,17 @@ execMain(function () {
 				CONST.DISCONNECT
 			][data[4]];
 			var solveTime = data[5] << 24 | data[6] << 16 | data[7] << 8 | data[8];
+			var prevState = lastState;
+			lastState = state;
+			if (isAdapter && state == CONST.IDLE && prevState == CONST.IDLE) {
+				// the adapter repeats its status about once a second, only report the switch to idle
+				return;
+			}
 			BluetoothTimer.callback({
 				state: state,
-				solveTime: solveTime
+				solveTime: solveTime,
+				// the adapter cannot see the reset button itself, a reset is only visible as finished -> idle
+				reset: isAdapter && state == CONST.IDLE && (prevState == CONST.FINISHED || prevState == CONST.STOPPED)
 			});
 		} else {
 			giikerutil.log('[QiyiTimer] unknown data', data);
@@ -192,6 +202,8 @@ execMain(function () {
 
 	function init(device) {
 		deviceName = device.name.trim();
+		isAdapter = deviceName.startsWith('QY-Adapter');
+		lastState = undefined;
 		decoder = decoder || $.aes128(Array(16).fill(0x77));
 		return BluetoothTimer.waitForAdvs().then(function(mfData) {
 			var dataView = getManufacturerDataBytes(mfData);

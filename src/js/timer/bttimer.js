@@ -20,7 +20,13 @@ execMain(function(timer) {
 			case CONST.GAN_RESET: // timer reset button pressed
 			case CONST.IDLE: // timer reset button pressed
 				inspectionTime = 0;
-				if (timer.hardTime() > 0 || timer.status() != -1) { // reset timer / cancel inspection timer
+				if (timerEvent.reset && timer.checkUseIns()) { // stackmat adapter reset after a solve: clear the time and start inspection at once
+					timer.hardTime(0);
+					timer.status(-3);
+					timer.lcd.reset();
+					timer.startTime($.now());
+					timer.lcd.fixDisplay(false, true);
+				} else if (timer.hardTime() > 0 || timer.status() != -1) { // reset timer / cancel inspection timer
 					timer.hardTime(0);
 					timer.status(-1);
 					timer.lcd.reset();
