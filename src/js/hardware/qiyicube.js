@@ -18,7 +18,7 @@ execMain(function() {
 		if (/^(QY-QYSC|XMD-TornadoV4-i)-.-[0-9A-F]{4}$/.exec(_deviceName)) {
 			defaultMac = 'CC:A3:00:00:' + _deviceName.slice(-4, -2) + ':' + _deviceName.slice(-2);
 		}
-		deviceMac = giikerutil.reqMacAddr(forcePrompt, isWrongKey, deviceMac, defaultMac);
+		deviceMac = giikerutil.reqMacAddr(forcePrompt, isWrongKey, deviceMac, defaultMac, _deviceName);
 	}
 
 	function crc16modbus(data) {

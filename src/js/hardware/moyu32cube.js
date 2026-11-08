@@ -195,7 +195,7 @@ execMain(function() {
 		if (/^WCU_MY32_[0-9A-F]{4}$/.exec(deviceName)) {
 			defaultMac = 'CF:30:16:00:' + deviceName.slice(9, 11) + ':' + deviceName.slice(11, 13);
 		}
-		deviceMac = giikerutil.reqMacAddr(forcePrompt, isWrongKey, deviceMac, defaultMac);
+		deviceMac = giikerutil.reqMacAddr(forcePrompt, isWrongKey, deviceMac, defaultMac, deviceName);
 		if (!deviceMac) {
 			decoder = null;
 			return;

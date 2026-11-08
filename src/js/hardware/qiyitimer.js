@@ -244,7 +244,7 @@ execMain(function () {
 			if (m) {
 				defaultMac = (deviceName.startsWith('QY-Adapter') ? 'CC:A8' : 'CC:A1') + ':00:00:' + m[1].slice(0, 2)  + ':' + m[1].slice(2, 4);
 			}
-			deviceMac = giikerutil.reqMacAddr(true, false, deviceMac, defaultMac);
+			deviceMac = giikerutil.reqMacAddr(true, false, deviceMac, defaultMac, deviceName);
 			return sendHello(deviceMac);
 		});
 	}

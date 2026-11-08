@@ -757,9 +757,12 @@ var giikerutil = execMain(function(CubieCube) {
 		});
 	}
 
-	function reqMacAddr(forcePrompt, isWrongKey, deviceMac, defaultMac) {
+	// devName: name of the device being connected. The deviceName above is only set after a cube reports
+	// its state or battery, so during connection it is still null (or the previous device's name).
+	function reqMacAddr(forcePrompt, isWrongKey, deviceMac, defaultMac, devName) {
+		var macKey = devName || deviceName;
 		var savedMacMap = JSON.parse(kernel.getProp('giiMacMap', '{}'));
-		var mac = savedMacMap[deviceName];
+		var mac = savedMacMap[macKey];
 		if (deviceMac) {
 			if (mac && mac.toUpperCase() == deviceMac.toUpperCase()) {
 				debugInfo.appendLog('[bluetoothutil] device mac matched');
@@ -775,8 +778,8 @@ var giikerutil = execMain(function(CubieCube) {
 				return;
 			}
 		}
-		if (mac != savedMacMap[deviceName]) {
-			savedMacMap[deviceName] = mac;
+		if (mac != savedMacMap[macKey]) {
+			savedMacMap[macKey] = mac;
 			kernel.setProp('giiMacMap', JSON.stringify(savedMacMap));
 			debugInfo.appendLog('[bluetoothutil] device mac updated');
 		}

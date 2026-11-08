@@ -172,7 +172,7 @@ execMain(function() {
 	}
 
 	function v2initKey(forcePrompt, isWrongKey, ver) {
-		var mac = giikerutil.reqMacAddr(forcePrompt, isWrongKey, deviceMac, null);
+		var mac = giikerutil.reqMacAddr(forcePrompt, isWrongKey, deviceMac, null, deviceName);
 		if (!mac) {
 			decoder = null;
 			return;
