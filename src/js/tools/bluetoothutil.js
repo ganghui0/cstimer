@@ -7,6 +7,7 @@ var scrHinter = execMain(function(CubieCube) {
 	var genScr = null;
 	var scrState = new CubieCube();
 	var preConj = 0;
+	var rawScrValid = true;
 
 	function setScramble(scramble) {
 		rawScrTxt = scramble;
@@ -15,33 +16,39 @@ var scrHinter = execMain(function(CubieCube) {
 		rawScr = scr.slice();
 		genState = null;
 		genScr = null;
+		rawScrValid = true;
 
 		scrState = new mathlib.CubieCube();
 		for (var i = 0; i < scr.length; i++) {
 			var m = scr[i][0] * 3 + scr[i][2] - 1;
 			if (m < 0 || m >= 18) { //TODO wide move convert
+				rawScrValid = false;
 				continue;
 			}
 			scrState.selfMoveStr('URFDLB'.charAt(scr[i][0]) + " 2'".charAt(scr[i][2] - 1));
 		}
 	}
 
-	function checkInSeq(state, gen, seq) {
+	function checkInSeq(state, gen, seq, puzzle) {
 		var c = new CubieCube();
 		var d = new CubieCube();
 		if (gen) {
 			c.init(gen.ca, gen.ea);
 		}
+		var is222 = puzzle == '222';
 		var next = 99;
-		if (c.isEqual(state)) {
+		if (cubeutil.cubiesMatch(c, state, is222)) {
 			next = 0;
 		}
 		var pow;
 		for (var i = 0; i < seq.length; i++) {
 			var a = seq[i][0] * 3;
+			if (seq[i][0] < 0 || seq[i][0] > 5) {
+				return null;
+			}
 			for (pow = 0; pow < 3; pow++) {
 				CubieCube.CubeMult(c, CubieCube.moveCube[a + pow], d);
-				if (d.isEqual(state)) {
+				if (cubeutil.cubiesMatch(d, state, is222)) {
 					next = (pow == seq[i][2] - 1) ? i + 1 : i;
 					break;
 				}
@@ -50,6 +57,9 @@ var scrHinter = execMain(function(CubieCube) {
 				break;
 			}
 			var m = seq[i][0] * 3 + seq[i][2] - 1;
+			if (m < 0 || m >= 18) {
+				return null;
+			}
 			CubieCube.CubeMult(c, CubieCube.moveCube[m], d);
 			c.init(d.ca, d.ea);
 		}
@@ -71,18 +81,18 @@ var scrHinter = execMain(function(CubieCube) {
 		return ret;
 	}
 
-	function checkState(state) {
-		if (!rawScrTxt || !GiikerCube.isConnected()
-				|| tools.getCurPuzzle() != '333' || timer.getCurTime() != 0 || timer.status() > 0) {
+	function checkState(state, puzzle) {
+		if (!rawScrTxt || !rawScrValid || !GiikerCube.isConnected()
+				|| tools.getCurPuzzle() != puzzle || timer.getCurTime() != 0 || timer.status() > 0) {
 			return;
 		}
 		var toMoveFix = null;
 		var toMoveRaw = null;
 		if (genState) {
-			toMoveFix = checkInSeq(state, genState, genScr);
+			toMoveFix = checkInSeq(state, genState, genScr, puzzle);
 		}
 		if (toMoveFix == null || toMoveFix.indexOf(':') == -1) {
-			toMoveRaw = checkInSeq(state, null, rawScr);
+			toMoveRaw = checkInSeq(state, null, rawScr, puzzle);
 			genState = null;
 			toMoveFix = null;
 		}
@@ -95,7 +105,10 @@ var scrHinter = execMain(function(CubieCube) {
 			CubieCube.CubeMult(stateInv, scrState, toSolve);
 			genScr = scramble_333.genFacelet(toSolve.toFaceCube());
 			genScr = cubeutil.parseScramble(genScr, "URFDLB");
-			toMoveFix = checkInSeq(state, genState, genScr);
+			toMoveFix = checkInSeq(state, genState, genScr, puzzle);
+		}
+		if (toMoveFix == null && toMoveRaw == null) {
+			return;
 		}
 		var toMove = toMoveFix ? scrambleToHtml(toMoveFix) : scrambleToHtml(toMoveRaw);
 		kernel.pushSignal('scrfix', toMove);
@@ -120,11 +133,11 @@ var scrHinter = execMain(function(CubieCube) {
 		return scrHtml;
 	}
 
-	function checkScramble(curCubie) {
-		if (rawScrTxt == "") {
+	function checkScramble(curCubie, curPuzzle) {
+		if (rawScrTxt == "" || !rawScrValid) {
 			return false;
 		}
-		return scrState.isEqual(curCubie);
+		return cubeutil.cubiesMatch(scrState, curCubie, curPuzzle == '222');
 	}
 
 	function getScrCubie() {
@@ -144,8 +157,8 @@ var giikerutil = execMain(function(CubieCube) {
 	var connectClick = $('<span class="click"></span>');
 	var debugClick = $('<span class="click" style="font-family:iconfont;padding-left:0.5em;">\ue69d</span>');
 	var resetClick = $('<span>' + GIIKER_RESET + '</span>').addClass('click');
-	var algCubingClick = $('<a target="_blank">Raw(N/A)</a>').addClass('click');
-	var lastSolveClick = $('<a target="_blank">Pretty(N/A)</a>').addClass('click');
+	var algCubingClick = $('<a target="_blank">' + GIIKER_RAWPRETTY.split('|')[0] + '(N/A)</a>').addClass('click');
+	var lastSolveClick = $('<a target="_blank">' + GIIKER_RAWPRETTY.split('|')[1] + '(N/A)</a>').addClass('click');
 	var canvas = $('<canvas>').css({
 		'display': 'block',
 		'box-sizing': 'content-box',
@@ -269,6 +282,7 @@ var giikerutil = execMain(function(CubieCube) {
 	var curCubie = new CubieCube();
 	var curState = curRawState;
 	var solvedStateInv = new CubieCube();
+	var curPuzzle = '333';
 
 	var detectTid = 0;
 
@@ -277,7 +291,7 @@ var giikerutil = execMain(function(CubieCube) {
 			clearTimeout(detectTid);
 			detectTid = 0;
 		}
-		if (kernel.getProp('giiAED')) {
+		if (curPuzzle == '333' && kernel.getProp('giiAED')) {
 			detectTid = setTimeout(function() {
 				if (checkMoves(moveTsList.slice(moveTsStart)) == 99) {
 					return;
@@ -378,21 +392,21 @@ var giikerutil = execMain(function(CubieCube) {
 
 	function markSolved() {
 		recenterGyro(2);
-		//mark current state as solved
 		solvedStateInv.invFrom(curRawCubie);
 		curState = mathlib.SOLVED_FACELET;
 		kernel.setProp('giiSolved', curRawState);
 		moveTsStart = moveTsList.length;
 		scrambleLength = 0;
 		drawState();
-		callback(curState, [], [null, $.now()]);
+		callback(curState, [], [null, $.now()], curPuzzle);
 	}
 
 	var moveTsList = []; //[[move, deviceTime, locTime], ...], locTime might be null
 	var moveTsStart = 0;
 
-	function giikerCallback(facelet, prevMoves, lastTs, hardware) {
+	function giikerCallback(facelet, prevMoves, lastTs, hardware, puzzle) {
 		var locTime = $.now();
+		curPuzzle = puzzle || '333';
 		lastTs = lastTs || [locTime, locTime];
 		if (deviceName != hardware) {
 			deviceName = hardware;
@@ -429,8 +443,8 @@ var giikerutil = execMain(function(CubieCube) {
 			CubieCube.CubeMult(hackedSolvedCubieInv, curCubie, hackedCubie);
 			retState = hackedCubie.toFaceCube();
 		}
-		callback(retState, prevMoves, lastTs);
-		scrHinter.checkState(curCubie);
+		callback(retState, prevMoves, lastTs, curPuzzle);
+		scrHinter.checkState(curCubie, curPuzzle);
 	}
 
 	function tsLinearFit(moveTsList, inv) {
@@ -520,7 +534,7 @@ var giikerutil = execMain(function(CubieCube) {
 			var move = solvMoves[i];
 			solveStr += "URFDLB".charAt(~~(move[0] / 3)) + " 2'".charAt(move[0] % 3) + "/*" + move[1] + "*/";
 		}
-		updateAlgClick(algCubingClick, 'Raw (' + moveCount + ')', scrambleStr, solveStr)
+		updateAlgClick(algCubingClick, GIIKER_RAWPRETTY.split('|')[0] + ' (' + moveCount + ')', scrambleStr, solveStr)
 	}
 
 	function updateSlopeSpan() {
@@ -534,10 +548,7 @@ var giikerutil = execMain(function(CubieCube) {
 
 	function updateAlgClick(click, text, setup, alg) {
 		if (setup || alg) {
-			click.attr('href',
-				'https://alg.cubing.net/?alg=' + encodeURIComponent(alg) +
-				'&setup=' + encodeURIComponent(setup)
-			);
+			click.attr('href', cubeutil.getAlgCubingUrl(alg, setup, curPuzzle));
 		} else {
 			click.removeAttr('href');
 		}
@@ -574,8 +585,8 @@ var giikerutil = execMain(function(CubieCube) {
 		hackedSolvedCubieInv = null;
 		hackedCubie = new CubieCube();
 		slopeTd.html(slopeIcon + '0%');
-		updateAlgClick(algCubingClick, "Raw(N/A)");
-		updateAlgClick(lastSolveClick, "Pretty(N/A)");
+		updateAlgClick(algCubingClick, GIIKER_RAWPRETTY.split('|')[0] + '(N/A)');
+		updateAlgClick(lastSolveClick, GIIKER_RAWPRETTY.split('|')[1] + '(N/A)');
 	}
 
 	function init() {
@@ -607,13 +618,13 @@ var giikerutil = execMain(function(CubieCube) {
 	}
 
 	function disconnect() {
-		if (GiikerCube.isConnected() && confirm("Disconnect?")) {
+		if (GiikerCube.isConnected() && confirm(GIIKER_DBG.split('|')[1])) {
 			stop();
 		}
 	}
 
 	function checkScramble() {
-		return scrHinter.checkScramble(curCubie);
+		return scrHinter.checkScramble(curCubie, curPuzzle);
 	}
 
 	var curScramble;
@@ -624,17 +635,17 @@ var giikerutil = execMain(function(CubieCube) {
 		} else if (signal == 'scramble' || signal == 'scrambleX') {
 			var scrType = value[0];
 			curScramble = value[1];
-			if (tools.puzzleType(scrType) != '333') {
+			if (!/^(222|333)$/.exec(tools.puzzleType(scrType))) {
 				curScramble = "";
 			}
 			scrHinter.setScramble(curScramble);
-			scrHinter.checkState(curCubie);
+			scrHinter.checkState(curCubie, curPuzzle);
 		} else if (signal == 'property') {
 			if (['giiVRC', 'imgSize'].indexOf(value[0]) >= 0) {
 				renderStatus();
 			} else if (/^(preScrT?|isTrainScr)$/.exec(value[0])) {
 				scrHinter.setScramble(curScramble);
-				scrHinter.checkState(curCubie);
+				scrHinter.checkState(curCubie, curPuzzle);
 			}
 		} else if (signal == 'timestd' && !value[4]) {
 			toReconsSolve = [timer.getStartTime(), value[0][1], value[1]];
@@ -705,11 +716,11 @@ var giikerutil = execMain(function(CubieCube) {
 			hackedCubie.invFrom(curCubie);
 			CubieCube.CubeMult(targetCubie, hackedCubie, hackedSolvedCubieInv);
 			moveTsStart = moveTsList.length;
-			callback(targetCubie.toFaceCube(), [], [null, $.now()]);
+			callback(targetCubie.toFaceCube(), [], [null, $.now()], curPuzzle);
 		}
 		scrambleLength = moveTsList.length - moveTsStart;
 		updateRawMovesClick();
-		updateAlgClick(lastSolveClick, "Pretty(N/A)");
+		updateAlgClick(lastSolveClick, GIIKER_RAWPRETTY.split('|')[1] + '(N/A)');
 	}
 
 	var hackedSolvedCubieInv = null;
@@ -724,7 +735,7 @@ var giikerutil = execMain(function(CubieCube) {
 			return;
 		}
 		hackedSolvedCubieInv = null;
-		callback(curState, [], [null, $.now()]);
+		callback(curState, [], [null, $.now()], curPuzzle);
 	}
 
 	var debugInfo = (function() {
@@ -740,7 +751,7 @@ var giikerutil = execMain(function(CubieCube) {
 			isShow = true;
 			debugText.val(msgs.join('\n'));
 			debugText[0].scrollTop = debugText[0].scrollHeight;
-			kernel.showDialog([debugText, closeCallback, closeCallback, closeCallback], 'share', 'Bluetooth Debug');
+			kernel.showDialog([debugText, closeCallback, closeCallback, closeCallback], 'share', GIIKER_DBG.split('|')[0]);
 		}
 
 		function appendLog() {
