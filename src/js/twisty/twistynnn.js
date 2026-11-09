@@ -88,7 +88,8 @@
 			opacity: 1,
 			dimension: 3,
 			faceColors: [0xffffff, 0xff0000, 0x00ff00, 0xffff00, 0xff9000, 0x0000ff],
-			scale: 1
+			scale: 1,
+			solid: false // rounded stickers on black cubies, like a real cube
 		};
 
 		// Passed Parameters
@@ -115,6 +116,109 @@
 		}
 		// Cube Helper Linear Algebra
 
+		// Solid look: every sticker sits in a black frame that fills the rest of its cubie face, and one
+		// sticker of each cubie carries the cubie's inner faces, so the turn animations move them along
+		// and nothing behind shows through. The renderer sorts polygons by their centers only, so the
+		// frame must not overlap the sticker, or it could be drawn over it.
+		var bodyMaterial = new THREE.MeshBasicMaterial({
+			color: 0x000000,
+			opacity: cubeOptions.opacity
+		});
+		var cubieDone = {};
+		var stickerOutline = null;
+
+		// counterclockwise outline of a rounded square, 3 points on each corner arc
+		function roundedOutline(width, radius) {
+			var h = width / 2 - radius;
+			var pts = [];
+			for (var c = 0; c < 4; c++) {
+				var cx = c == 0 || c == 1 ? h : -h;
+				var cy = c == 1 || c == 2 ? h : -h;
+				for (var k = 0; k < 3; k++) {
+					var ang = (c - 1 + k / 2) * Math.PI / 2;
+					pts.push([cx + radius * Math.cos(ang), cy + radius * Math.sin(ang)]);
+				}
+			}
+			return pts;
+		}
+
+		function makeGeometry(pts, faces) {
+			var geo = new THREE.Geometry();
+			for (var k = 0; k < pts.length; k++) {
+				geo.vertices.push(new THREE.Vertex(new THREE.Vector3(pts[k][0], pts[k][1], 0)));
+			}
+			for (var k = 0; k < faces.length; k++) { // all counterclockwise, so none is culled as a back face
+				geo.faces.push(new THREE.Face4(faces[k][0], faces[k][1], faces[k][2], faces[k][3]));
+			}
+			geo.computeCentroids();
+			geo.computeFaceNormals();
+			return geo;
+		}
+
+		function stickerGeometry() {
+			var faces = [];
+			for (var k = 1; k + 1 < stickerOutline.length; k += 2) {
+				faces.push([0, k, k + 1, (k + 2) % stickerOutline.length]);
+			}
+			return makeGeometry(stickerOutline, faces);
+		}
+
+		function frameGeometry() {
+			var n = stickerOutline.length;
+			var pts = stickerOutline.slice();
+			for (var k = 0; k < n; k++) { // push each outline point out to the edge of the cubie face
+				var p = stickerOutline[k];
+				var scale = 1 / Math.max(Math.abs(p[0]), Math.abs(p[1]));
+				pts.push([p[0] * scale, p[1] * scale]);
+			}
+			var faces = [];
+			for (var k = 0; k < n; k++) {
+				faces.push([k, n + k, n + (k + 1) % n, (k + 1) % n]);
+			}
+			return makeGeometry(pts, faces);
+		}
+
+		function bodyFace(matrix) {
+			var face = new THREE.Mesh(new THREE.Plane(2, 2), [bodyMaterial]);
+			face.overdraw = true;
+			face.matrixAutoUpdate = false;
+			face.matrix.copy(matrix);
+			return face;
+		}
+
+		// faces of the cubie centered at c (cube coordinates) that are not on the outside of the puzzle
+		function innerFaces(c) {
+			var ret = [];
+			for (var k = 0; k < numSides; k++) {
+				var n = sidesNorm[index_side[k]];
+				var f = [c[0] + n.x, c[1] + n.y, c[2] + n.z];
+				if (Math.max(Math.abs(f[0]), Math.abs(f[1]), Math.abs(f[2])) < cubeOptions.dimension - 0.5) {
+					ret.push(new THREE.Matrix4().multiply(new THREE.Matrix4().setTranslation(f[0], f[1], f[2]), sidesUV[k]));
+				}
+			}
+			return ret;
+		}
+
+		function addCubieBody(sticker, stickerMatrix) {
+			var frame = new THREE.Mesh(frameGeometry(), [bodyMaterial]);
+			frame.overdraw = true;
+			sticker.addChild(frame);
+			var c = [
+				Math.round(stickerMatrix.n14 - stickerMatrix.n13),
+				Math.round(stickerMatrix.n24 - stickerMatrix.n23),
+				Math.round(stickerMatrix.n34 - stickerMatrix.n33)
+			];
+			if (cubieDone[c]) {
+				return;
+			}
+			cubieDone[c] = true;
+			var inv = THREE.Matrix4.makeInvert(stickerMatrix, new THREE.Matrix4());
+			var faces = innerFaces(c);
+			for (var k = 0; k < faces.length; k++) {
+				sticker.addChild(bodyFace(new THREE.Matrix4().multiply(inv, faces[k])));
+			}
+		}
+
 		//Cube Object Generation
 		for (var i = 0; i < numSides; i++) {
 			var facePieces = [];
@@ -138,8 +242,15 @@
 					if (cubeOptions.stickerBorder) {
 						meshes.push(borderMaterial);
 					}
-					var stickerInterior = new THREE.Mesh(new THREE.Plane(cubeOptions.stickerWidth, cubeOptions.stickerWidth), meshes);
-					stickerInterior.doubleSided = cubeOptions.doubleSided;
+					var stickerInterior;
+					if (cubeOptions.solid) {
+						stickerOutline = stickerOutline || roundedOutline(cubeOptions.stickerWidth, 0.25);
+						stickerInterior = new THREE.Mesh(stickerGeometry(), [materials[key]]);
+						stickerInterior.overdraw = true;
+					} else {
+						stickerInterior = new THREE.Mesh(new THREE.Plane(cubeOptions.stickerWidth, cubeOptions.stickerWidth), meshes);
+						stickerInterior.doubleSided = cubeOptions.doubleSided;
+					}
 					sticker.addChild(stickerInterior);
 
 					var transformationMatrix = new THREE.Matrix4().multiply(sidesUV[i], new THREE.Matrix4().setTranslation(
@@ -148,6 +259,9 @@
 					));
 
 					sticker.matrix.copy(transformationMatrix);
+					if (cubeOptions.solid) {
+						addCubieBody(sticker, transformationMatrix);
+					}
 
 					sticker.matrixAutoUpdate = false;
 					sticker.update();
@@ -155,6 +269,22 @@
 					facePieces.push([transformationMatrix, sticker]);
 					cubeObject.addChild(sticker);
 
+				}
+			}
+		}
+
+		if (cubeOptions.solid) { // cubies without stickers never leave their place in face turns
+			var maxCoord = cubeOptions.dimension - 1;
+			for (var cx = -maxCoord; cx <= maxCoord; cx += 2) {
+				for (var cy = -maxCoord; cy <= maxCoord; cy += 2) {
+					for (var cz = -maxCoord; cz <= maxCoord; cz += 2) {
+						if (Math.max(Math.abs(cx), Math.abs(cy), Math.abs(cz)) < maxCoord) {
+							var faces = innerFaces([cx, cy, cz]);
+							for (var k = 0; k < faces.length; k++) {
+								cubeObject.addChild(bodyFace(faces[k]));
+							}
+						}
+					}
 				}
 			}
 		}

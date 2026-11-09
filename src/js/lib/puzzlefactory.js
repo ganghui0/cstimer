@@ -122,7 +122,8 @@ var puzzleFactory = execMain(function() {
 			options["type"] = "cube";
 			options["faceColors"] = $.col2std(kernel.getProp("colcube"), [3, 4, 5, 0, 1, 2]); // U L F D L B
 			options["dimension"] = ~~puzzle.slice(4) || 3;
-			options["stickerWidth"] = 1.7;
+			options["solid"] = options['style'] == 's';
+			options["stickerWidth"] = options["solid"] ? 1.84 : 1.7;
 		} else if (puzzle == "skb") {
 			options["type"] = "skewb";
 			options["faceColors"] = $.col2std(kernel.getProp("colskb"), [0, 5, 4, 2, 1, 3]);
