@@ -18,6 +18,18 @@ var puzzleFactory = execMain(function() {
 		return this.twistyScene.resize();
 	};
 
+	Puzzle.prototype.getCanvas = function() {
+		return this.twistyScene.getCanvas();
+	};
+
+	Puzzle.prototype.getCamera = function() {
+		return this.twistyScene.getCamera && this.twistyScene.getCamera();
+	};
+
+	Puzzle.prototype.setOrientation = function(quat) {
+		return this.twistyScene.setOrientation && this.twistyScene.setOrientation(quat);
+	};
+
 	Puzzle.prototype.addMoves = function(args) {
 		return this.twistyScene.addMoves(args);
 	};

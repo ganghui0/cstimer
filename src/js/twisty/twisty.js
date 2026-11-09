@@ -192,6 +192,24 @@ window.twistyjs = (function() {
 			render();
 		};
 
+		// [theta, phi]: camera angle around the vertical axis and its height, both in 1/48 turns
+		this.getCamera = function() {
+			return [cameraTheta, cameraPhi];
+		};
+
+		// quat: [w, x, y, z] rotation of the whole puzzle, or null for none
+		this.setOrientation = function(quat) {
+			if (!twisty) {
+				return;
+			}
+			var obj = twisty._3d;
+			obj.useQuaternion = !!quat;
+			if (quat) {
+				obj.quaternion = new THREE.Quaternion(quat[1], quat[2], quat[3], quat[0]);
+			}
+			render();
+		};
+
 		this.keydown = function(e) {
 			var keyCode = e.keyCode;
 			var ret = twisty.keydownCallback(twisty, e);

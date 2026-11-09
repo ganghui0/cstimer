@@ -351,7 +351,33 @@ var giikerutil = execMain(function(CubieCube) {
 		return false;
 	}
 
+	var gyroCallback = null;
+	var gyroQuat = null;
+	// how the next orientation re-centers the display: 0 not at all, 1 heading only (on connect, when the
+	// cube may lie anywhere), 2 the virtual cube's own orientation (on reset), 3 and 4 hold that orientation
+	// until the next face turn (after each scramble, so that settling hands do not tilt the new state).
+	// 2 to 4 also clear the heading drift of the gyro.
+	var gyroRecenter = 1;
+
+	// quat: [w, x, y, z] orientation of the cube from its gyro, rotating cube coordinates (x: R, y: U, z: F)
+	// into world coordinates (y: up), or null when the cube no longer reports it
+	function updateGyro(quat) {
+		gyroQuat = quat;
+		if (gyroCallback) {
+			var next = gyroCallback(quat, gyroRecenter);
+			if (quat) {
+				gyroRecenter = next;
+			}
+		}
+	}
+
+	function recenterGyro(mode) {
+		gyroRecenter = mode;
+		gyroQuat && updateGyro(gyroQuat); // show the new state upright at once
+	}
+
 	function markSolved() {
+		recenterGyro(2);
 		//mark current state as solved
 		solvedStateInv.invFrom(curRawCubie);
 		curState = mathlib.SOLVED_FACELET;
@@ -380,6 +406,9 @@ var giikerutil = execMain(function(CubieCube) {
 		if (prevMoves.length > 0) {
 			var move = "URFDLB".indexOf(prevMoves[0][0]) * 3 + " 2'".indexOf(prevMoves[0][1]);
 			moveTsList.push([move, lastTs[0], lastTs[1]]);
+			if (gyroRecenter > 2) { // a face was turned, stop holding
+				gyroRecenter = 0;
+			}
 		}
 		if (scrambleLength > 0) {
 			updateRawMovesClick();
@@ -522,6 +551,8 @@ var giikerutil = execMain(function(CubieCube) {
 	function giikerEvtCallback(info, event) {
 		if (info == 'disconnect') {
 			logohint.push(LGHINT_BTDISCON);
+			updateGyro(null);
+			gyroRecenter = 1;
 			renderStatus();
 			kernel.pushSignal('scrfix', curScramble);
 			return typeof evtCallback == 'function' && evtCallback(info, event);
@@ -549,6 +580,8 @@ var giikerutil = execMain(function(CubieCube) {
 
 	function init() {
 		cleanup();
+		gyroRecenter = 1;
+		gyroQuat = null;
 		curRawState = kernel.getProp('giiSolved', mathlib.SOLVED_FACELET);
 		curRawCubie.fromFacelet(curRawState);
 		solvedStateInv.invFrom(curRawCubie);
@@ -661,6 +694,7 @@ var giikerutil = execMain(function(CubieCube) {
 	var scrambleLength = 0;
 
 	function markScrambled(virtual) {
+		recenterGyro(3);
 		var targetCubie = curCubie;
 		if (virtual) {
 			targetCubie = scrHinter.getScrCubie();
@@ -802,6 +836,10 @@ var giikerutil = execMain(function(CubieCube) {
 		reSync: reSync,
 		tsLinearFix: tsLinearFix,
 		updateBattery: updateBattery,
+		updateGyro: updateGyro,
+		setGyroCallback: function(func) {
+			gyroCallback = func;
+		},
 		setLastSolve: setLastSolve,
 		log: debugInfo.appendLog,
 		chkAvail: chkAvail,

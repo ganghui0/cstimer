@@ -96,6 +96,8 @@ execMain(function() {
 		return ret;
 	}
 
+	var writeChain = Promise.resolve();
+
 	function sendRequest(req) {
 		if (!_chrct_write) {
 			giikerutil.log('[Moyu32Cube] sendRequest cannot find write chrct');
@@ -103,7 +105,14 @@ execMain(function() {
 		}
 		var encodedReq = encode(req.slice());
 		giikerutil.log('[Moyu32Cube] sendRequest', req, encodedReq);
-		return _chrct_write.writeValue(new Uint8Array(encodedReq).buffer);
+		// one write at a time: the battery poll can start while init is still sending requests,
+		// and a second write fails with "GATT operation already in progress"
+		var chrct = _chrct_write;
+		var ret = writeChain.then(function() {
+			return chrct.writeValue(new Uint8Array(encodedReq).buffer);
+		});
+		writeChain = ret.catch($.noop);
+		return ret;
 	}
 
 	function sendSimpleRequest(opcode) {
@@ -122,6 +131,13 @@ execMain(function() {
 
 	function requestCubePower() {
 		return sendSimpleRequest(164);
+	}
+
+	function enableGyro() {
+		var req = mathlib.valuedArray(20, 0);
+		req[0] = 172;
+		req[2] = 1;
+		return sendRequest(req);
 	}
 
 	function getManufacturerDataBytes(mfData) {
@@ -247,6 +263,11 @@ execMain(function() {
 			return requestCubeStatus();
 		}).then(function () {
 			return requestCubePower();
+		}).then(function () {
+			// the cube then reports its orientation about 20 times a second; moves still work without it
+			return Promise.resolve(enableGyro()).catch(function (err) {
+				giikerutil.log('[Moyu32Cube] failed to enable gyro', err);
+			});
 		});
 	}
 
@@ -272,9 +293,27 @@ execMain(function() {
 		}
 	}
 
+	function parseGyro(value) {
+		var q = [];
+		for (var i = 0; i < 4; i++) { // w, x, y, z as little endian int32, scaled by 2^30
+			q[i] = (value[1 + i * 4] | value[2 + i * 4] << 8 | value[3 + i * 4] << 16 | value[4 + i * 4] << 24) / 1073741824;
+		}
+		var len = Math.hypot(q[0], q[1], q[2], q[3]);
+		if (!len) {
+			return;
+		}
+		// The sensor's x, y, z axes point to the R, B and U faces, and its world z axis points up
+		// (measured on a WCU_MY32). Swap them into x: R, y: U, z: F and world y up.
+		giikerutil.updateGyro([q[0] / len, q[1] / len, q[3] / len, -q[2] / len]);
+	}
+
 	function parseData(value) {
 		var locTime = $.now();
 		value = decode(value);
+		if (value[0] == 171) { // gyro
+			parseGyro(value);
+			return;
+		}
 		for (var i = 0; i < value.length; i++) {
 			value[i] = (value[i] + 256).toString(2).slice(1);
 		}
@@ -319,7 +358,6 @@ execMain(function() {
 			if (!invalidMove) {
 				updateMoveTimes(locTime);
 			}
-		// } else if (msgType == 171) { // gyro
 		}
 	}
 
@@ -382,6 +420,7 @@ execMain(function() {
 			_chrct_read = null;
 		}
 		_chrct_write = null;
+		writeChain = Promise.resolve();
 		deviceName = null;
 		deviceMac = null;
 		prevMoves = [];
