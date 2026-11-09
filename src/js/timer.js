@@ -771,6 +771,7 @@ var timer = execMain(function(regListener, regProp, getProp, pretty, ui, pushSig
 		regProp('vrc', 'vrcMP', 1, PROPERTY_VRCMP, ['n', ['n', 'cfop', 'fp', 'cf4op', 'cf4o2p2', 'roux'], PROPERTY_VRCMPS.split('|')], 1);
 		regProp('vrc', 'vrcAH', ~1, PROPERTY_VRCAH, ['11', ['00', '01', '10', '11'], PROPERTY_VRCAHS.split('|')], 1);
 		regProp('vrc', 'giiMode', 1, PROPERTY_GIIMODE, ['n', ['n', 't', 'at'], PROPERTY_GIIMODES.split('|')], 1);
+		regProp('vrc', 'giiRT', 0, 'Continuous training: time recognition too (start when the case is shown)', [false], 1);
 		regProp('vrc', 'giiVRC', 1, PROPERTY_GIIKERVRC, ['v', ['n', 'v', 's', 'q', 'ql', 'q2'], ['None', 'Virtual', 'Solid', 'qCube', 'qLast', 'q2Look']], 1);
 		regProp('vrc', 'giiOri', 1, PROPERTY_GIIORI, ['auto',
 			["auto", "0", "3", "2", "1", "4", "5", "6", "7", "23", "14", "19", "8", "17", "10", "21", "12", "11", "22", "13", "18", "15", "16", "9", "20"],

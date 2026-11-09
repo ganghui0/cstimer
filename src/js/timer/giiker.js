@@ -384,6 +384,18 @@ execMain(function(timer) {
 		}
 	})();
 
+	// continuous training: the next case is shown once the cube has been left alone for a moment,
+	// so that a turn right after the solve (e.g. a mispredicted AUF) does not lose it
+	var nextCasePending = false;
+
+	function scheduleNextCase() {
+		clearReadyTid();
+		nextCasePending = true;
+		waitReadyTid = setTimeout(function() {
+			markScrambled($.now());
+		}, 500);
+	}
+
 	function clearReadyTid() {
 		if (waitReadyTid) {
 			clearTimeout(waitReadyTid);
@@ -408,7 +420,9 @@ execMain(function(timer) {
 		clearReadyTid();
 		var solvingMethod = kernel.getProp('vrcMP', 'n');
 		if (timer.status() == -1) {
-			if (canStart(currentFacelet)) {
+			if (nextCasePending && kernel.getProp('giiMode') == 'at') {
+				scheduleNextCase();
+			} else if (canStart(currentFacelet)) {
 				var delayStart = kernel.getProp('giiSD');
 				if (delayStart == 's') {
 					//according to scramble
@@ -439,49 +453,93 @@ execMain(function(timer) {
 			} else {
 				insTime = 0;
 			}
-			timer.startTime(locTime);
-			timer.curTime([insTime > 17000 ? -1 : (insTime > 15000 ? 2000 : 0)]);
-			timer.status(cubeutil.getStepCount(solvingMethod));
-			rawMoves = [];
-			for (var i = 0; i < timer.status(); i++) {
-				rawMoves[i] = [];
-			}
-			totPhases = timer.status();
-			var initialProgress = cubeutil.getProgress(prevFacelet, solvingMethod);
-			timer.updateMulPhase(totPhases, initialProgress, locTime);
-			timer.lcd.reset(enableVRC);
-			timer.lcd.fixDisplay(false, true);
+			startSolve(locTime, prevFacelet, false);
 		}
 		if (timer.status() >= 1) {
+			if (solveTid) {
+				if (prevMoves.length == 0) { // nothing was turned, keep waiting
+					return;
+				}
+				clearTimeout(solveTid); // turned again right after the solved state, go on solving
+				solveTid = 0;
+				timer.lcd.fixDisplay(false, true);
+			}
 			if (prevMoves.length > 0)
 				rawMoves[timer.status() - 1].push([prevMoves[0], lastTs[0], lastTs[1]]);
 			var curProgress = cubeutil.getProgress(facelet, solvingMethod);
 			timer.updateMulPhase(totPhases, curProgress, locTime);
 
 			if (isGiiSolved(currentFacelet)) {
-				rawMoves.reverse();
-				var pretty = cubeutil.getPrettyReconstruction(rawMoves, solvingMethod);
-				var moveCnt = pretty.totalMoves;
-				giikerutil.setLastSolve(pretty.prettySolve);
-				timer.curTime()[1] = locTime - timer.startTime();
-				timer.status(-1);
-				giikerutil.reSync();
-				timer.lcd.fixDisplay(false, true);
-				if (timer.curTime()[1] != 0) {
-					var sol = giikerutil.tsLinearFix(rawMoves.flat()); // fit deviceTime to locTime
-					var cnt = 0;
-					DEBUG && console.log('time fit, old=', timer.curTime());
-					for (var i = 0; i < rawMoves.length; i++) {
-						cnt += rawMoves[i].length;
-						timer.curTime()[rawMoves.length - i] = cnt == 0 ? 0 : sol[cnt - 1][1];
-					}
-					DEBUG && console.log('time fit, new=', timer.curTime());
-					sol = cubeutil.getConjMoves(cubeutil.moveSeq2str(sol), true);
-					kernel.pushSignal('time', ["", 0, timer.curTime(), 0, [sol, '333']]);
-				} else if (kernel.getProp('giiMode') != 'n') {
-					kernel.pushSignal('ctrl', ['scramble', 'next']);
+				if (kernel.getProp('giiMode') == 'at') {
+					// show the time already, but only count it if the cube is not turned again right away
+					timer.lcd.setRunning(false);
+					timer.lcd.val(locTime - timer.startTime());
+					solveTime = locTime;
+					solveTid = setTimeout(confirmSolve, SOLVE_CONFIRM_MS);
+				} else {
+					finishSolve(locTime);
 				}
 			}
+		}
+	}
+
+	var timedFromCase = null; // when the case was shown, if the solve is timed from then instead of the first turn
+
+	function startSolve(startTime, facelet, fromCase) {
+		var solvingMethod = kernel.getProp('vrcMP', 'n');
+		timedFromCase = fromCase ? startTime : null;
+		timer.startTime(startTime);
+		timer.curTime([insTime > 17000 ? -1 : (insTime > 15000 ? 2000 : 0)]);
+		timer.status(cubeutil.getStepCount(solvingMethod));
+		rawMoves = [];
+		for (var i = 0; i < timer.status(); i++) {
+			rawMoves[i] = [];
+		}
+		totPhases = timer.status();
+		var initialProgress = cubeutil.getProgress(facelet, solvingMethod);
+		timer.updateMulPhase(totPhases, initialProgress, startTime);
+		timer.lcd.reset(enableVRC);
+		timer.lcd.fixDisplay(false, true);
+	}
+
+	// continuous training: a solve only ends when the solved cube is not turned again right away
+	// (most turns within an alg follow each other faster), so that solving the case and then doing
+	// a mispredicted AUF does not count, and the AUF has to be fixed
+	var SOLVE_CONFIRM_MS = 400;
+	var solveTid = 0;
+	var solveTime = 0;
+
+	function confirmSolve() {
+		if (solveTid) {
+			clearTimeout(solveTid);
+			solveTid = 0;
+			finishSolve(solveTime);
+		}
+	}
+
+	function finishSolve(locTime) {
+		var solvingMethod = kernel.getProp('vrcMP', 'n');
+		rawMoves.reverse();
+		var pretty = cubeutil.getPrettyReconstruction(rawMoves, solvingMethod);
+		var moveCnt = pretty.totalMoves;
+		giikerutil.setLastSolve(pretty.prettySolve);
+		timer.curTime()[1] = locTime - timer.startTime();
+		timer.status(-1);
+		giikerutil.reSync();
+		timer.lcd.fixDisplay(false, true);
+		if (timer.curTime()[1] != 0) {
+			var sol = giikerutil.tsLinearFix(rawMoves.flat(), timedFromCase); // fit deviceTime to locTime
+			var cnt = 0;
+			DEBUG && console.log('time fit, old=', timer.curTime());
+			for (var i = 0; i < rawMoves.length; i++) {
+				cnt += rawMoves[i].length;
+				timer.curTime()[rawMoves.length - i] = cnt == 0 ? 0 : sol[cnt - 1][1];
+			}
+			DEBUG && console.log('time fit, new=', timer.curTime());
+			sol = cubeutil.getConjMoves(cubeutil.moveSeq2str(sol), true);
+			kernel.pushSignal('time', ["", 0, timer.curTime(), 0, [sol, '333']]);
+		} else if (kernel.getProp('giiMode') != 'n') {
+			kernel.pushSignal('ctrl', ['scramble', 'next']);
 		}
 	}
 
@@ -511,6 +569,7 @@ execMain(function(timer) {
 
 	function markScrambled(now) {
 		clearReadyTid();
+		nextCasePending = false;
 		if (timer.status() == -1) {
 			if (kernel.getProp('giiMode') == 'n') {
 				if (!giikerutil.checkScramble()) {
@@ -521,10 +580,15 @@ execMain(function(timer) {
 			} else {
 				giikerutil.markScrambled(true);
 			}
-			timer.status(-2);
-			timer.startTime(now);
-			timer.lcd.reset(enableVRC);
-			timer.lcd.fixDisplay(true, true);
+			if (kernel.getProp('giiMode') == 'at' && kernel.getProp('giiRT')) { // time recognition too
+				insTime = 0;
+				startSolve(now, currentFacelet, true);
+			} else {
+				timer.status(-2);
+				timer.startTime(now);
+				timer.lcd.reset(enableVRC);
+				timer.lcd.fixDisplay(true, true);
+			}
 			if (kernel.getProp('giiBS')) {
 				metronome.playTick();
 			}
@@ -554,10 +618,7 @@ execMain(function(timer) {
 		}, /^vrcOri$/);
 		kernel.regListener('giikerVRC', 'scramble', function(signal, value) {
 			if (enableVRC && timer.status() == -1 && kernel.getProp('giiMode') == 'at' && GiikerCube.isConnected()) {
-				clearReadyTid();
-				waitReadyTid = setTimeout(function() {
-					markScrambled($.now());
-				}, 500);
+				scheduleNextCase();
 			}
 		});
 	});
@@ -586,15 +647,18 @@ execMain(function(timer) {
 		onkeydown: function(keyCode) {
 			var now = $.now();
 			if (keyCode == 27 || keyCode == 28) {
-				var recordDNF = timer.status() >= 1;
+				confirmSolve(); // a solve waiting to be counted is finished, not a DNF
+				// not turned yet (when timing from the shown case): stop without recording a DNF
+				var recordDNF = timer.status() >= 1 && rawMoves.flat().length > 0;
 				clearReadyTid();
+				nextCasePending = false;
 				timer.status(-1);
 				giikerutil.reSync();
 				timer.lcd.fixDisplay(false, true);
 				if (recordDNF) {
 					timer.curTime()[0] = -1;
 					rawMoves.reverse();
-					var sol = giikerutil.tsLinearFix(rawMoves.flat()); // fit deviceTime to locTime
+					var sol = giikerutil.tsLinearFix(rawMoves.flat(), timedFromCase); // fit deviceTime to locTime
 					var cnt = 0;
 					DEBUG && console.log('time fit, old=', timer.curTime());
 					for (var i = 0; i < rawMoves.length; i++) {
