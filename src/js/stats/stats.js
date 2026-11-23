@@ -1157,7 +1157,8 @@ var stats = execMain(function(kpretty, round, kpround) {
 			}
 			sessionIdx = ++sessionIdxMax;
 			var curDate = new Date();
-			var newName = (curDate.getMonth() + 1) + "." + curDate.getDate() + ' ' + curScrType;
+			// read the type now: a cached copy is stale after a page load, when no change is signalled
+			var newName = (curDate.getMonth() + 1) + "." + curDate.getDate() + ' ' + (kernel.getProp('scrType') || '333');
 
 			kernel.setProp('sessionN', sessionIdxMax);
 			var prevData = sessionData[ssSorted[rank - 1]] || {};
@@ -1567,7 +1568,6 @@ var stats = execMain(function(kpretty, round, kpround) {
 				} else if (value[0] == 'sessionN') {
 					sessionIdxMax = value[1];
 				} else if (value[0] == 'scrType') {
-					curScrType = value[1];
 					if (value[2] == 'modify' && kernel.getProp('scr2ss')) {
 						createSession(undefined, false);
 					}
@@ -1800,8 +1800,6 @@ var stats = execMain(function(kpretty, round, kpround) {
 		}
 		return { kind: type == 1 ? 'm' : 'a', size: size };
 	}
-
-	var curScrType = '333';
 
 	var roundMilli = 1;
 
