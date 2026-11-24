@@ -409,6 +409,36 @@ var stats = execMain(function(kpretty, round, kpround) {
 		return true;
 	}
 
+	// 4x4 parity lives in the comment as a tag word: "o" (OLL parity), "p" (PLL parity) or
+	// "op" (both), so solves tagged by hand count as well. As a mask, bit 0 = OLL, bit 1 = PLL.
+	var parityRe = /(^|[\s,;])(op|po|o|p)(?=[\s,;]|$)/ig;
+	var parityTags = ['', 'o', 'p', 'op'];
+
+	// whether solves of the current puzzle carry parity (4x4 only for now). The list is first
+	// drawn during startup, so this reads the scramble type directly and needs no other module.
+	function hasParity() {
+		return /^444/.test(kernel.getProp('scrType'));
+	}
+
+	// both run for every row drawn, so a comment of any type (imported data) must not throw
+	function getParity(comment) {
+		var mask = 0;
+		('' + (comment || '')).replace(parityRe, function(m, sep, tag) {
+			tag = tag.toLowerCase();
+			mask |= (tag.indexOf('o') == -1 ? 0 : 1) | (tag.indexOf('p') == -1 ? 0 : 2);
+		});
+		return mask;
+	}
+
+	function stripParity(comment) {
+		return ('' + (comment || '')).replace(parityRe, '$1').replace(/^[\s,;]+|\s+$/g, '');
+	}
+
+	function withParity(comment, mask) {
+		var rest = stripParity(comment);
+		return parityTags[mask] + (mask && rest ? ' ' : '') + rest;
+	}
+
 	var floatCfm = (function() {
 		var cfmDiv = $('<div style="text-align:center; font-family: initial;">');
 		var cfmTime = $('<span style="font-size:2.5em;"/>');
@@ -417,6 +447,8 @@ var stats = execMain(function(kpretty, round, kpround) {
 		var cfmScrR = $('<input type="text" readonly>').css('width', '8em');
 		var cfmDate = $('<input type="text" readonly>').css('width', '8em');
 		var cfmExt = $('<input type="text" readonly>').css('width', '8em');
+		var cfmParO = $('<input type="checkbox">');
+		var cfmParP = $('<input type="checkbox">');
 		var cfmIdx = 0;
 
 		function procTxt() {
@@ -424,6 +456,22 @@ var stats = execMain(function(kpretty, round, kpround) {
 				return;
 			}
 			setComment(cfmIdx, cfmTxtR.val());
+			showParity();
+		}
+
+		function showParity() {
+			var mask = getParity(timesAt(cfmIdx)[2]);
+			cfmParO.prop('checked', !!(mask & 1));
+			cfmParP.prop('checked', !!(mask & 2));
+		}
+
+		function procParity() {
+			if (cfmIdx < 0 || cfmIdx >= times.length) {
+				return;
+			}
+			var mask = (cfmParO.prop('checked') ? 1 : 0) | (cfmParP.prop('checked') ? 2 : 0);
+			setComment(cfmIdx, withParity(timesAt(cfmIdx)[2], mask));
+			cfmTxtR.val(timesAt(cfmIdx)[2]);
 		}
 
 		function procClk(e) {
@@ -493,9 +541,15 @@ var stats = execMain(function(kpretty, round, kpround) {
 				reviewElem = $('<span class="click" data="r">' + STATS_REVIEW + '</span>');
 				reviewElem = $('<tr>').append($('<td>').append(reviewElem), $('<td>').append(cfmExt));
 			}
+			var parityElem = '';
+			if (hasParity()) {
+				parityElem = $('<tr>').append('<td>Parity</td>', $('<td style="white-space:nowrap;">').append(
+					$('<label>').append(cfmParO, 'OLL'), ' &nbsp; ', $('<label>').append(cfmParP, 'PLL')));
+			}
 			cfmDiv.empty().append(cfmTime, '<br>', prettyMPA(time[0]), '<br>')
 				.append('<span class="click" data="c"> &#128203; </span>|<span class="click" data="p"> OK </span>|<span class="click" data="p"> +2 </span>|<span class="click" data="p"> DNF </span>| ', cfmDelR)
 				.append('<br>', $('<table style="display:inline-block;">').append(
+					parityElem,
 					$('<tr>').append(`<td>${STATS_COMMENT}</td>`, $('<td>').append(cfmTxtR)),
 					$('<tr>').append(`<td><span class="click" data="s">${SCRAMBLE_SCRAMBLE}</span></td>`, $('<td>').append(cfmScrR)),
 					$('<tr>').append(`<td>${STATS_DATE}</td>`, $('<td>').append(cfmDate)),
@@ -505,6 +559,8 @@ var stats = execMain(function(kpretty, round, kpround) {
 			cfmScrR.val(time[1]);
 			cfmDate.val(mathlib.time2str(time[3]))
 			cfmTxtR.val(time[2]).unbind('change').change(procTxt);
+			cfmParO.add(cfmParP).unbind('change').change(procParity);
+			showParity();
 			cfmExt.val(time[4] ? JSON.stringify(time[4]) : "");
 		}
 
@@ -585,7 +641,8 @@ var stats = execMain(function(kpretty, round, kpround) {
 		return {
 			proc: proc,
 			delLast: delLast,
-			setCfm: setCfm
+			setCfm: setCfm,
+			refresh: genDiv
 		}
 	})();
 
@@ -601,7 +658,8 @@ var stats = execMain(function(kpretty, round, kpround) {
 		}
 		var prev = target.prevAll();
 		var row = prev.length;
-		var idx = ~~(row == 0 ? target : prev.eq(-1)).html().replace("*", "") - 1;
+		// the number cell reads like "*12op": comment mark, solve number, parity mark
+		var idx = ~~parseInt((row == 0 ? target : prev.eq(-1)).text().replace("*", "")) - 1;
 		if (row > 4 || row < 0) {
 			return;
 		}
@@ -661,7 +719,10 @@ var stats = execMain(function(kpretty, round, kpround) {
 		var tdpb = '<td class="times pb">';
 
 		var ret = [];
-		ret.push(`<td class="times">${time[2] && "*"}${i + 1}</td>`);
+		// the parity tag gets its own mark, so "*" is left for the rest of the comment
+		var parity = hasParity() ? getParity(time[2]) : 0;
+		var note = parity ? stripParity(time[2]) : time[2];
+		ret.push(`<td class="times">${note && "*"}${i + 1}${parity ? '<span class="parity">' + parityTags[parity] + '</span>' : ''}</td>`);
 		ret.push((st0pb ? tdpb : tdtm) + pretty(curTime, false) + '</td>');
 
 		var statSrc = kernel.getProp('statsrc', 't');
@@ -1826,6 +1887,12 @@ var stats = execMain(function(kpretty, round, kpround) {
 				updateUtil(['property', value[0]]);
 			} else if (/^stat(sum|thres|[bw]pa)$/.exec(value[0])) {
 				updateSumTable();
+			} else if (value[0] == 'scrType') {
+				// the parity marks and toggles follow the puzzle; a session load redraws by itself
+				if (!isInit && value[2] != 'session') {
+					table_ctrl.updateTable(false);
+					floatCfm.refresh();
+				}
 			} else if (value[0] == 'statssum') {
 				updateAvgRow(curDim);
 				resultsHeight();
