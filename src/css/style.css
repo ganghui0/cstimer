@@ -558,9 +558,22 @@ html:not(.m) .mywindow:hover, html:not(.m) #leftbar:hover {
 	font-weight: bold;
 }
 
+/* the comment mark and the parity tag sit in equal slots on either side of the solve number */
+.times > .cmark,
 .times > .parity {
-	margin-left: 0.15em;
+	display: inline-block;
+	width: 0.95em;
+}
+
+.times > .cmark {
+	text-align: right;
+}
+
+.times > .parity {
+	width: calc(0.95em / 0.7);
 	font-size: 0.7em;
+	text-align: left;
+	text-indent: 0.15em;
 	opacity: 0.7;
 }
 

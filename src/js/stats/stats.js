@@ -719,10 +719,15 @@ var stats = execMain(function(kpretty, round, kpround) {
 		var tdpb = '<td class="times pb">';
 
 		var ret = [];
-		// the parity tag gets its own mark, so "*" is left for the rest of the comment
-		var parity = hasParity() ? getParity(time[2]) : 0;
-		var note = parity ? stripParity(time[2]) : time[2];
-		ret.push(`<td class="times">${note && "*"}${i + 1}${parity ? '<span class="parity">' + parityTags[parity] + '</span>' : ''}</td>`);
+		// the parity tag gets its own mark, so "*" is left for the rest of the comment. Where rows
+		// can carry a tag, every row holds both marks in equal slots on either side of the number,
+		// so the numbers stay centred and line up whatever marks a row has
+		var slots = hasParity();
+		var parity = slots ? getParity(time[2]) : 0;
+		var note = (parity ? stripParity(time[2]) : time[2]) && "*";
+		ret.push('<td class="times">' + (slots ?
+			`<span class="cmark">${note}</span>${i + 1}<span class="parity">${parityTags[parity]}</span>` :
+			`${note}${i + 1}`) + '</td>');
 		ret.push((st0pb ? tdpb : tdtm) + pretty(curTime, false) + '</td>');
 
 		var statSrc = kernel.getProp('statsrc', 't');
